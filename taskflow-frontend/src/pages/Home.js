@@ -7,12 +7,28 @@ function Home() {
   const [taskInput, setTaskInput] = useState('');
   const [tasks, setTasks] = useState([]);
 
+  const handleDeleteTask = (indexToDelete) => {
+    setTasks(tasks.filter((_, index) => index !== indexToDelete));
+  }
+
   const handleAddTask = () => {
     if (taskInput.trim() === '') return;
-    setTasks([...tasks, taskInput]);
+    setTasks([...tasks, { text: taskInput, isEditing: false}]);
     setTaskInput('');
   };
 
+  const handleEditTask= (index) => {
+    const updatedTasks = [...tasks];
+    updatedTasks[index].isEditing = true;
+    setTasks(updatedTasks);
+  }
+
+  const handleSaveTask = (index, newText) =>{
+    const updatedTasks = [...tasks];
+    updatedTasks[index].text = newText;
+    updatedTasks[index].isEditing = false;
+    setTasks(updatedTasks);
+  }
   return (
     <div className="home">
       <h1>taskflow</h1>
@@ -37,13 +53,34 @@ function Home() {
         {tasks.map((task, index) => (
           <div key={index} className="task-box">
             <input type="checkbox" className="task-checkbox" />
-            <span>{task}</span>
+
+            {task.isEditing ? (
+              <input  
+              className="task-input"
+              autoFocus
+              value={task.text}
+              onChange={(e) => {
+                const updatedTasks = [...tasks];
+                updatedTasks[index].text = e.target.value;
+                setTasks(updatedTasks);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter'){
+                  handleSaveTask(index, task.text);
+                }
+              }}
+              onBlur={() => handleSaveTask(index, task.text)}
+              />
+            ) : (
+              <span>{task.text}</span>
+            )}
+            
 
             <div className="task-actions">
-            <button className="edit-button">
+            <button className="edit-button" onClick={() => handleEditTask(index)}>
               <img src={editIcon} alt="Edit Task" className="icon"/>
             </button>
-            <button className="delete-button">
+            <button className="delete-button" onClick={() => handleDeleteTask(index)}>
                 <img src={deleteIcon} alt="Delete Task" className="icon" />
             </button>
           </div>

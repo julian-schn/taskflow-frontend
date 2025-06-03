@@ -128,6 +128,10 @@ html, body {
     height: 28px;
 }
 
+.delete-button:hover .icon{
+    filter: brightness(200%);
+}
+
 .edit-button{
   background: none;
     border: none;
@@ -140,6 +144,10 @@ html, body {
     height: 28px;
 }
 
+.edit-button:hover .icon{
+  filter: brightness(200%);
+}
+
 .icon{
     width: 28px;
     height: 28px;
@@ -148,6 +156,3 @@ html, body {
     border: none;
 }
 
-.delete-button:hover .icon{
-    filter: brightness(170%);
-}
