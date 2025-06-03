@@ -33,7 +33,7 @@ function Home() {
     <div className="home">
       <h1>taskflow</h1>
 
-      <div className="task-box">
+      <div className="input-box">
         <input
           type="text"
           className="task-input"
