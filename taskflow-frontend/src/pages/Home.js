@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './Home.css';
 import deleteIcon from '../assets/delete_icon.svg';
 import editIcon from "../assets/edit_icon.svg";
+import { NavLink } from 'react-router-dom';
+
 
 function Home() {
   const [taskInput, setTaskInput] = useState('');
@@ -41,6 +43,7 @@ function Home() {
           className="task-input"
           placeholder="Add a new task"
           value={taskInput}
+          maxLength={50}
           onChange={(e) => setTaskInput(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
@@ -61,6 +64,7 @@ function Home() {
                 className="task-input"
                 autoFocus
                 value={task.text}
+                maxLength={50}
                 onChange={(e) => {
                   const updatedTasks = [...tasks];
                   updatedTasks[index].text = e.target.value;
@@ -90,18 +94,24 @@ function Home() {
       </div>
 
       <div className="filter-buttons">
-        <button
-          onClick={() => setActiveFilter('all')}
-          className={`filter-button ${activeFilter === 'all' ? 'active' : ''}`}
-        >
-          All
-        </button>
-        <button
-          onClick={() => setActiveFilter('completed')}
-          className={`filter-button ${activeFilter === 'completed' ? 'active' : ''}`}
-        >
-          Completed
-        </button>
+        <NavLink
+        to="/"
+          end
+          className={({ isActive }) =>
+         `filter-button ${isActive ? 'active' : ''}`
+           }
+             >
+              All
+               </NavLink>
+  
+          <NavLink
+          to="/completed"
+           className={({ isActive }) =>
+          `filter-button ${isActive ? 'active' : ''}`
+           }
+           >
+            Completed
+          </NavLink>
       </div>
     </div>
   );

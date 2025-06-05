@@ -183,6 +183,9 @@ html, body {
   position: relative;
   font-size: 16px;
   padding: 5px;
+  text-decoration: none;
+  font-family: inherit;
+  transition: color 0.2s ease;
 }
 
 .filter-button.active {
