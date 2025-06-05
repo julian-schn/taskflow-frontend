@@ -8,7 +8,6 @@ import { NavLink } from 'react-router-dom';
 function Home() {
   const [taskInput, setTaskInput] = useState('');
   const [tasks, setTasks] = useState([]);
-  const [activeFilter, setActiveFilter] = useState('all');
 
   const handleDeleteTask = (indexToDelete) => {
     setTasks(tasks.filter((_, index) => index !== indexToDelete));

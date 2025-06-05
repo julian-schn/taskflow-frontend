@@ -1,0 +1,66 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #202831;
+}
+
+.completed {
+  color: #E9E0E0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: top;
+  flex-direction: column;
+}
+
+.completed h1 {
+  font-size: 48px;
+  margin-bottom: 40px;
+  margin-top: 48px;
+
+}
+
+.completed h2{
+    font-size: 28px;
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 24px;
+  margin-top: 20px;
+  font-size: 18px;
+  font-family: sans-serif;
+  color: #9fa2a6;
+}
+
+.filter-button {
+  background: none;
+  border: none;
+  color: #9fa2a6;
+  cursor: pointer;
+  position: relative;
+  font-size: 18px !important;
+  padding: 5px;
+  text-decoration: none;
+  font-family: inherit;
+  transition: color 0.2s ease;
+}
+
+.filter-button.active {
+  color: #3B5BA9;
+  font-weight: 500;
+}
+
+.filter-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #3B5BA9;
+  border-radius: 1px;
+}

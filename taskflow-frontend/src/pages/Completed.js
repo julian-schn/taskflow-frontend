@@ -1,14 +1,36 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Home.css'; // Falls du das Styling wiederverwenden willst
+import './Completed.css'; 
+import { NavLink } from 'react-router-dom';
 
 function Completed() {
   return (
-    <div className="home">
-      <h1>Completed Tasks</h1>
-      <p>Hier könnten deine erledigten Tasks angezeigt werden.</p>
-      <Link to="/" className="box-button">Zurück</Link>
+    <div className="completed">
+      <h1>taskflow.</h1>
+      <h2>Completed Tasks:</h2>
+      <div className="filter-buttons">
+
+              <NavLink
+              to="/"
+                end
+                className={({ isActive }) =>
+               `filter-button ${isActive ? 'active' : ''}`
+                 }
+                   >
+                    All
+                     </NavLink>
+        
+                <NavLink
+                to="/completed"
+                 className={({ isActive }) =>
+                `filter-button ${isActive ? 'active' : ''}`
+                 }
+                 >
+                  Completed
+                </NavLink>
+            </div>
+    
     </div>
   );
 }
