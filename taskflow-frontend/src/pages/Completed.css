@@ -23,8 +23,43 @@ html, body {
 
 .completed h2{
     font-size: 28px;
-    margin-top: 0;
-    margin-bottom: 16px;
+    margin-top: 0px; 
+    margin-bottom: 5px;
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 18px;
+}
+
+.delete-button {
+  margin-right: 15px;
+}
+
+.delete-button, .edit-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.delete-button:hover .icon,
+.edit-button:hover .icon {
+  filter: brightness(200%);
+}
+
+.icon {
+  width: 27px;
+  pointer-events: none;
+  user-select: none;
+  border: none;
 }
 
 .filter-buttons {
@@ -64,4 +99,18 @@ html, body {
   height: 2px;
   background-color: #3B5BA9;
   border-radius: 1px;
+}
+
+.save-button{
+  background-color: transparent;
+  color: #4CAF50;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: color 0,2s ease;
+  font-size: 14px;
+}
+
+.save-button:hover{
+  filter: brightness(200%);
 }

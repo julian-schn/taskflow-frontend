@@ -139,7 +139,7 @@ html, body {
   display: flex;
   align-items: center;
   margin-left: auto;
-  gap: 15px;
+  gap: 18px;
 }
 
 .delete-button, .edit-button {
@@ -152,6 +152,10 @@ html, body {
   justify-content: center;
   width: 28px;
   height: 28px;
+}
+
+.delete-button {
+  margin-right: 15px;
 }
 
 .delete-button:hover .icon,
@@ -203,4 +207,18 @@ html, body {
   height: 2px;
   background-color: #3B5BA9;
   border-radius: 1px;
+}
+
+.save-button{
+  background-color: transparent;
+  color: #4CAF50;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: color 0,2s ease;
+  font-size: 14px;
+}
+
+.save-button:hover{
+  filter: brightness(200%);
 }
