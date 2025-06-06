@@ -3,33 +3,16 @@ import './Home.css';
 import deleteIcon from '../assets/delete_icon.svg';
 import editIcon from "../assets/edit_icon.svg";
 import { NavLink } from 'react-router-dom';
-
+import { useTasks } from '../context/TaskContext';
 
 function Home() {
   const [taskInput, setTaskInput] = useState('');
-  const [tasks, setTasks] = useState([]);
-
-  const handleDeleteTask = (indexToDelete) => {
-    setTasks(tasks.filter((_, index) => index !== indexToDelete));
-  };
+  const { tasks, addTask, deleteTask, toggleComplete, editTask, startEdit } = useTasks();
 
   const handleAddTask = () => {
     if (taskInput.trim() === '') return;
-    setTasks([...tasks, { text: taskInput, isEditing: false }]);
+    addTask(taskInput);
     setTaskInput('');
-  };
-
-  const handleEditTask = (index) => {
-    const updatedTasks = [...tasks];
-    updatedTasks[index].isEditing = true;
-    setTasks(updatedTasks);
-  };
-
-  const handleSaveTask = (index, newText) => {
-    const updatedTasks = [...tasks];
-    updatedTasks[index].text = newText;
-    updatedTasks[index].isEditing = false;
-    setTasks(updatedTasks);
   };
 
   return (
@@ -44,19 +27,20 @@ function Home() {
           value={taskInput}
           maxLength={50}
           onChange={(e) => setTaskInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleAddTask();
-            }
-          }}
+          onKeyDown={(e) => e.key === 'Enter' && handleAddTask()}
         />
         <button className="box-button" onClick={handleAddTask}>Add</button>
       </div>
 
       <div className="task-list">
-        {tasks.map((task, index) => (
-          <div key={index} className="task-box">
-            <input type="checkbox" className="task-checkbox" />
+        {tasks.filter(task => !task.completed).map((task) => (
+          <div key={task.id} className="task-box">
+            <input
+              type="checkbox"
+              className="task-checkbox"
+              checked={task.completed}
+              onChange={() => toggleComplete(task.id)}
+            />
 
             {task.isEditing ? (
               <input
@@ -64,27 +48,19 @@ function Home() {
                 autoFocus
                 value={task.text}
                 maxLength={50}
-                onChange={(e) => {
-                  const updatedTasks = [...tasks];
-                  updatedTasks[index].text = e.target.value;
-                  setTasks(updatedTasks);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleSaveTask(index, task.text);
-                  }
-                }}
-                onBlur={() => handleSaveTask(index, task.text)}
+                onChange={(e) => editTask(task.id, e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && editTask(task.id, task.text)}
+                onBlur={() => editTask(task.id, task.text)}
               />
             ) : (
               <span>{task.text}</span>
             )}
 
             <div className="task-actions">
-              <button className="edit-button" onClick={() => handleEditTask(index)}>
+              <button className="edit-button" onClick={() => startEdit(task.id)}>
                 <img src={editIcon} alt="Edit Task" className="icon" />
               </button>
-              <button className="delete-button" onClick={() => handleDeleteTask(index)}>
+              <button className="delete-button" onClick={() => deleteTask(task.id)}>
                 <img src={deleteIcon} alt="Delete Task" className="icon" />
               </button>
             </div>
@@ -93,24 +69,8 @@ function Home() {
       </div>
 
       <div className="filter-buttons">
-        <NavLink
-        to="/"
-          end
-          className={({ isActive }) =>
-         `filter-button ${isActive ? 'active' : ''}`
-           }
-             >
-              All
-               </NavLink>
-  
-          <NavLink
-          to="/completed"
-           className={({ isActive }) =>
-          `filter-button ${isActive ? 'active' : ''}`
-           }
-           >
-            Completed
-          </NavLink>
+        <NavLink to="/" end className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>All</NavLink>
+        <NavLink to="/completed" className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>Completed</NavLink>
       </div>
     </div>
   );
