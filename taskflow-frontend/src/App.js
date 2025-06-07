@@ -4,9 +4,11 @@ import './App.css';
 import Home from './pages/Home';
 import Completed from './pages/Completed';
 import { TaskProvider} from './context/TaskContext'
+import { ThemeProvider } from './pages/ThemeContext';
 
 function App() {
   return (
+    <ThemeProvider>
     <TaskProvider>
     <Router>
       <div className="App">
@@ -17,6 +19,7 @@ function App() {
       </div>
     </Router>
     </TaskProvider>
+    </ThemeProvider>
   );
 }
 

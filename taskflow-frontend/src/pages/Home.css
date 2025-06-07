@@ -2,16 +2,15 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background-color: #202831;
 }
 
 .home {
-  color: #E9E0E0;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: top;
   flex-direction: column;
+  position: relative;
 }
 
 .home h1 {
@@ -33,7 +32,6 @@ html, body {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  color: #E9E0E0;
   font-family: sans-serif;
 }
 
@@ -43,7 +41,6 @@ html, body {
   height: 40px;
   display: flex;
   align-items: center;
-  color: #E9E0E0;
   font-family: sans-serif;
   background-color: #1f2128;
 }
@@ -64,7 +61,6 @@ html, body {
   left: 0;
   right: 0;
   height: 1px;
-  background-color: #c5bdbd;
 }
 
 .task-list:empty {
@@ -88,7 +84,6 @@ html, body {
 .task-input {
   background-color: transparent;
   border: none;
-  color: #E9E0E0;
   font-size: 16px;
   outline: none;
   flex: 1;
@@ -174,13 +169,12 @@ html, body {
   margin-bottom: 50px;
   font-size: 18px;
   font-family: sans-serif;
-  color: #9fa2a6;
+  justify-content: center;
 }
 
 .filter-button {
   background: none;
   border: none;
-  color: #9fa2a6;
   cursor: pointer;
   position: relative;
   font-size: 18px !important;
@@ -191,7 +185,6 @@ html, body {
 }
 
 .filter-button.active {
-  color: #3B5BA9;
   font-weight: 500;
 }
 
@@ -255,8 +248,47 @@ html, body {
 .no-tasks {
   margin-top: 45px;
   text-align: center;
-  color: #E9E0E0;
   font-family: sans-serif;
 }
 
+.filter-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 50px;
+  height: 40px;
+}
 
+.filter-buttons {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 24px;
+}
+
+.mode-buttons {
+  position: absolute;
+  right: 0;
+  top: 95%;
+  transform: translateY(-50%);
+  margin-right: 100px;
+}
+
+
+.mode {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.mode-icon {
+  width: 25px;
+  height: 25px;
+  transition: filter 0.2s ease;
+}
+
+.mode-icon:hover {
+  filter: brightness(200%);
+}

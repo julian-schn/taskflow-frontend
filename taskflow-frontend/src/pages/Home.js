@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import './Home.css';
 import deleteIcon from '../assets/delete_icon.svg';
-import editIcon from "../assets/edit_icon.svg";
+import editIcon from '../assets/edit_icon.svg';
 import { NavLink } from 'react-router-dom';
 import { useTasks } from '../context/TaskContext';
 import arrowUp from '../assets/arrow_upward.svg';
 import arrowDown from '../assets/arrow_downward.svg';
-
+import lightIcon from '../assets/light_mode.svg';
+import darkIcon from '../assets/dark_mode.svg';
+import './theme.css';
+import {useTheme} from './ThemeContext.js';
 function Home() {
   const [taskInput, setTaskInput] = useState('');
   const [editText, setEditText] = useState('');
   const [editingTaskId, setEditingTaskId] = useState(null);
+  const {darkMode, toggleMode} =useTheme();
 
   const {
     tasks,
@@ -43,6 +47,7 @@ function Home() {
   };
 
   const visibleTasks = tasks.filter(task => !task.completed);
+
 
   return (
     <div className="home">
@@ -131,9 +136,16 @@ function Home() {
         </div>
       )}
 
-      <div className="filter-buttons">
-        <NavLink to="/" end className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>All</NavLink>
-        <NavLink to="/completed" className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>Completed</NavLink>
+      <div className="filter-container">
+        <div className="filter-buttons">
+          <NavLink to="/" end className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>All</NavLink>
+          <NavLink to="/completed" className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>Completed</NavLink>
+        </div>
+        <div className="mode-buttons">
+          <button className="mode" onClick={toggleMode}>
+            <img src={darkMode ? lightIcon : darkIcon} alt="Toggle Dark" className="mode-icon" />
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -5,7 +5,12 @@ import deleteIcon from '../assets/delete_icon.svg';
 import editIcon from '../assets/edit_icon.svg';
 import arrowUp from '../assets/arrow_upward.svg';
 import arrowDown from '../assets/arrow_downward.svg';
+import lightIcon from '../assets/light_mode.svg';
+import darkIcon from '../assets/dark_mode.svg';
 import { useTasks } from '../context/TaskContext';
+import './theme.css';
+import { useTheme } from './ThemeContext';
+
 
 function Completed() {
   const {
@@ -20,7 +25,7 @@ function Completed() {
 
   const [editText, setEditText] = useState('');
   const [editingTaskId, setEditingTaskId] = useState(null);
-
+  const{darkMode, toggleMode} = useTheme();
   const completedTasks = tasks.filter(task => task.completed);
 
   const handleSaveEdit = (taskId) => {
@@ -36,13 +41,14 @@ function Completed() {
     editTask(taskId, tasks.find(t => t.id === taskId).text);
   };
 
+
   return (
     <div className="completed">
       <h1>taskflow.</h1>
       <h2>Completed Tasks:</h2>
 
       {completedTasks.length === 0 ? (
-        <p>No completed tasks yet.</p>
+        <p className="no-tasks">No completed tasks yet.</p>
       ) : (
         <div className="task-list">
           {completedTasks.map((task, index) => (
@@ -82,12 +88,12 @@ function Completed() {
                       startEdit(task.id);
                     }}
                   >
-                    <img src={editIcon} alt="Edit Task" className="icon" />
+                    <img src={editIcon} alt="Edit" className="icon" />
                   </button>
                 )}
 
                 <button className="delete-button" onClick={() => deleteTask(task.id)}>
-                  <img src={deleteIcon} alt="Delete Task" className="icon" />
+                  <img src={deleteIcon} alt="Delete" className="icon" />
                 </button>
 
                 <button
@@ -95,7 +101,7 @@ function Completed() {
                   onClick={() => moveTaskUp(task.id)}
                   disabled={index === 0}
                 >
-                  <img src={arrowUp} alt="Move Up" className="icon" />
+                  <img src={arrowUp} alt="Up" className="icon" />
                 </button>
 
                 <button
@@ -103,7 +109,7 @@ function Completed() {
                   onClick={() => moveTaskDown(task.id)}
                   disabled={index === completedTasks.length - 1}
                 >
-                  <img src={arrowDown} alt="Move Down" className="icon" />
+                  <img src={arrowDown} alt="Down" className="icon" />
                 </button>
               </div>
             </div>
@@ -111,9 +117,20 @@ function Completed() {
         </div>
       )}
 
-      <div className="filter-buttons">
-        <NavLink to="/" end className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>All</NavLink>
-        <NavLink to="/completed" className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>Completed</NavLink>
+      <div className="filter-container">
+        <div className="filter-buttons">
+          <NavLink to="/" end className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>
+            All
+          </NavLink>
+          <NavLink to="/completed" className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>
+            Completed
+          </NavLink>
+        </div>
+        <div className="mode-buttons">
+          <button className="mode" onClick={toggleMode}>
+            <img src={darkMode ? lightIcon : darkIcon} alt="Toggle Dark" className="mode-icon" />
+          </button>
+        </div>
       </div>
     </div>
   );
