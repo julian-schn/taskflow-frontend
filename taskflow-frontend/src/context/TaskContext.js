@@ -11,7 +11,7 @@ export const TaskProvider = ({ children }) => {
       id: Date.now(), 
       text,
       completed: false,
-      isEditing: false
+      isEditing: false,
     }]);
   };
 
@@ -43,8 +43,40 @@ export const TaskProvider = ({ children }) => {
     );
   };
 
+  const moveTaskUp = (id) => {
+    setTasks(prev => {
+      const index = prev.findIndex(task => task.id === id);
+      if (index <= 0) return prev;
+
+      const newTasks = [...prev];
+      [newTasks[index - 1], newTasks[index]] = [newTasks[index], newTasks[index - 1]];
+      return newTasks;
+    });
+  };
+
+  const moveTaskDown = (id) => {
+    setTasks(prev => {
+      const index = prev.findIndex(task => task.id === id);
+      if (index === -1 || index >= prev.length - 1) return prev;
+
+      const newTasks = [...prev];
+      [newTasks[index + 1], newTasks[index]] = [newTasks[index], newTasks[index + 1]];
+      return newTasks;
+    });
+  };
+
   return (
-    <TaskContext.Provider value={{ tasks, addTask, deleteTask, toggleComplete, editTask, startEdit }}>
+    <TaskContext.Provider value={{
+      tasks,
+      setTasks,
+      addTask,
+      deleteTask,
+      toggleComplete,
+      editTask,
+      startEdit,
+      moveTaskUp,
+      moveTaskDown
+    }}>
       {children}
     </TaskContext.Provider>
   );

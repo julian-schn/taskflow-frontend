@@ -40,7 +40,7 @@ html, body {
 .task-box {
   position: relative;
   padding: 5px;
-  height: 38px;
+  height: 40px;
   display: flex;
   align-items: center;
   color: #E9E0E0;
@@ -138,8 +138,9 @@ html, body {
 .task-actions {
   display: flex;
   align-items: center;
-  margin-left: auto;
-  gap: 18px;
+  justify-content: flex-end;
+  margin-left: 20px;
+  gap: 10px;
 }
 
 .delete-button, .edit-button {
@@ -154,12 +155,8 @@ html, body {
   height: 28px;
 }
 
-.delete-button {
-  margin-right: 15px;
-}
 
-.delete-button:hover .icon,
-.edit-button:hover .icon {
+.icon:hover {
   filter: brightness(200%);
 }
 
@@ -222,3 +219,44 @@ html, body {
 .save-button:hover{
   filter: brightness(200%);
 }
+
+.move-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.move-button:hover .icon {
+  filter: brightness(200%);
+}
+.move-button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.task-box span {
+  flex: 1;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  display: -webkit-box;   
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+}
+
+.no-tasks {
+  margin-top: 45px;
+  text-align: center;
+  color: #E9E0E0;
+  font-family: sans-serif;
+}
+
+

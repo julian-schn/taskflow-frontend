@@ -4,12 +4,24 @@ import deleteIcon from '../assets/delete_icon.svg';
 import editIcon from "../assets/edit_icon.svg";
 import { NavLink } from 'react-router-dom';
 import { useTasks } from '../context/TaskContext';
+import arrowUp from '../assets/arrow_upward.svg';
+import arrowDown from '../assets/arrow_downward.svg';
 
 function Home() {
   const [taskInput, setTaskInput] = useState('');
-  const { tasks, addTask, deleteTask, toggleComplete, editTask, startEdit } = useTasks();
   const [editText, setEditText] = useState('');
   const [editingTaskId, setEditingTaskId] = useState(null);
+
+  const {
+    tasks,
+    addTask,
+    deleteTask,
+    toggleComplete,
+    editTask,
+    startEdit,
+    moveTaskUp,
+    moveTaskDown
+  } = useTasks();
 
   const handleAddTask = () => {
     if (taskInput.trim() === '') return;
@@ -27,8 +39,10 @@ function Home() {
   const cancelEdit = (taskId) => {
     setEditingTaskId(null);
     setEditText('');
-    editTask(taskId, tasks.find(t => t.id === taskId).text); // reset isEditing to false
+    editTask(taskId, tasks.find(t => t.id === taskId).text);
   };
+
+  const visibleTasks = tasks.filter(task => !task.completed);
 
   return (
     <div className="home">
@@ -47,54 +61,75 @@ function Home() {
         <button className="box-button" onClick={handleAddTask}>Add</button>
       </div>
 
-      <div className="task-list">
-        {tasks.filter(task => !task.completed).map((task) => (
-          <div key={task.id} className="task-box">
-            <input
-              type="checkbox"
-              className="task-checkbox"
-              checked={task.completed}
-              onChange={() => toggleComplete(task.id)}
-            />
-
-            {task.isEditing && editingTaskId === task.id ? (
+      {visibleTasks.length === 0 ? (
+        <p className="no-tasks">No tasks yet.</p>
+      ) : (
+        <div className="task-list">
+          {visibleTasks.map((task, index) => (
+            <div key={task.id} className="task-box">
               <input
-                className="task-input"
-                autoFocus
-                value={editText}
-                maxLength={50}
-                onChange={(e) => setEditText(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSaveEdit(task.id)}
-                onBlur={() => cancelEdit(task.id)}
+                type="checkbox"
+                className="task-checkbox"
+                checked={task.completed}
+                onChange={() => toggleComplete(task.id)}
               />
-            ) : (
-              <span>{task.text}</span>
-            )}
 
-            <div className="task-actions">
               {task.isEditing && editingTaskId === task.id ? (
-                <button className="save-button" onMouseDown={() => handleSaveEdit(task.id)}>
-                  Save
-                </button>
+                <input
+                  className="task-input"
+                  autoFocus
+                  value={editText}
+                  maxLength={50}
+                  onChange={(e) => setEditText(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSaveEdit(task.id)}
+                  onBlur={() => cancelEdit(task.id)}
+                />
               ) : (
-                <button
-                  className="edit-button"
-                  onClick={() => {
-                    setEditText(task.text);
-                    setEditingTaskId(task.id);
-                    startEdit(task.id);
-                  }}
-                >
-                  <img src={editIcon} alt="Edit Task" className="icon" />
-                </button>
+                <span>{task.text}</span>
               )}
-              <button className="delete-button" onClick={() => deleteTask(task.id)}>
-                <img src={deleteIcon} alt="Delete Task" className="icon" />
-              </button>
+
+              <div className="task-actions">
+                {task.isEditing && editingTaskId === task.id ? (
+                  <button className="save-button" onMouseDown={() => handleSaveEdit(task.id)}>
+                    Save
+                  </button>
+                ) : (
+                  <button
+                    className="edit-button"
+                    onClick={() => {
+                      setEditText(task.text);
+                      setEditingTaskId(task.id);
+                      startEdit(task.id);
+                    }}
+                  >
+                    <img src={editIcon} alt="Edit Task" className="icon" />
+                  </button>
+                )}
+
+                <button className="delete-button" onClick={() => deleteTask(task.id)}>
+                  <img src={deleteIcon} alt="Delete Task" className="icon" />
+                </button>
+
+                <button
+                  className="move-button"
+                  onClick={() => moveTaskUp(task.id)}
+                  disabled={index === 0}
+                >
+                  <img src={arrowUp} alt="Move Up" className="icon" />
+                </button>
+
+                <button
+                  className="move-button"
+                  onClick={() => moveTaskDown(task.id)}
+                  disabled={index === visibleTasks.length - 1}
+                >
+                  <img src={arrowDown} alt="Move Down" className="icon" />
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <div className="filter-buttons">
         <NavLink to="/" end className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>All</NavLink>

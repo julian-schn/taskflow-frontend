@@ -3,10 +3,21 @@ import './Completed.css';
 import { NavLink } from 'react-router-dom';
 import deleteIcon from '../assets/delete_icon.svg';
 import editIcon from '../assets/edit_icon.svg';
+import arrowUp from '../assets/arrow_upward.svg';
+import arrowDown from '../assets/arrow_downward.svg';
 import { useTasks } from '../context/TaskContext';
 
 function Completed() {
-  const { tasks, toggleComplete, deleteTask, editTask, startEdit } = useTasks();
+  const {
+    tasks,
+    toggleComplete,
+    deleteTask,
+    editTask,
+    startEdit,
+    moveTaskUp,
+    moveTaskDown
+  } = useTasks();
+
   const [editText, setEditText] = useState('');
   const [editingTaskId, setEditingTaskId] = useState(null);
 
@@ -22,7 +33,7 @@ function Completed() {
   const cancelEdit = (taskId) => {
     setEditingTaskId(null);
     setEditText('');
-    editTask(taskId, tasks.find(t => t.id === taskId).text); // reset editing mode
+    editTask(taskId, tasks.find(t => t.id === taskId).text);
   };
 
   return (
@@ -34,7 +45,7 @@ function Completed() {
         <p>No completed tasks yet.</p>
       ) : (
         <div className="task-list">
-          {completedTasks.map((task) => (
+          {completedTasks.map((task, index) => (
             <div key={task.id} className="task-box">
               <input
                 type="checkbox"
@@ -74,8 +85,25 @@ function Completed() {
                     <img src={editIcon} alt="Edit Task" className="icon" />
                   </button>
                 )}
+
                 <button className="delete-button" onClick={() => deleteTask(task.id)}>
                   <img src={deleteIcon} alt="Delete Task" className="icon" />
+                </button>
+
+                <button
+                  className="move-button"
+                  onClick={() => moveTaskUp(task.id)}
+                  disabled={index === 0}
+                >
+                  <img src={arrowUp} alt="Move Up" className="icon" />
+                </button>
+
+                <button
+                  className="move-button"
+                  onClick={() => moveTaskDown(task.id)}
+                  disabled={index === completedTasks.length - 1}
+                >
+                  <img src={arrowDown} alt="Move Down" className="icon" />
                 </button>
               </div>
             </div>

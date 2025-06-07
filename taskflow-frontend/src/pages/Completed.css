@@ -30,12 +30,9 @@ html, body {
 .task-actions {
   display: flex;
   align-items: center;
-  margin-left: auto;
-  gap: 18px;
-}
-
-.delete-button {
-  margin-right: 15px;
+  justify-content: flex-end;
+  margin-left: 1px;
+  gap: 10px;
 }
 
 .delete-button, .edit-button {
@@ -50,8 +47,7 @@ html, body {
   height: 28px;
 }
 
-.delete-button:hover .icon,
-.edit-button:hover .icon {
+.icon:hover {
   filter: brightness(200%);
 }
 
