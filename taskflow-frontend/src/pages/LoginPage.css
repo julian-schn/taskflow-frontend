@@ -78,3 +78,61 @@ body.dark-mode .login-form button {
 body.dark-mode .login-form button:hover {
   background-color: #3B5BA9;
 }
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.error-message {
+  color: red; 
+  font-size: 14px;
+  margin-bottom: 4px;
+  margin-left: 4px;
+}
+
+
+.input-error {
+  border: 1px solid red !important;
+  background-color: #ffe6e6;
+}
+
+body.dark-mode .error-message{
+  color: #ff7a7a ;
+  font-size: 14px;
+  margin-bottom: 4px;
+  margin-left: 4px;
+}
+
+body.dark-mode .input-error {
+  border: 1px solid #ff7a7a !important;
+  background-color: #3a1f1f;
+}
+
+.signup-text {
+  text-align: center;
+  font-size: 15px;
+}
+
+.link-button {
+  all: unset !important;
+  color: #3B5BA9 !important;
+  text-decoration: underline !important;
+  cursor: pointer !important;
+  font-size: 15px !important;
+  font-family: inherit !important;
+  transition: color 0.2s ease !important;
+}
+
+.link-button:hover {
+  color: #28417f !important;
+}
+
+body.dark-mode .link-button {
+  color: #2A50B6 !important;
+}
+
+body.dark-mode .link-button:hover {
+  color: #4d73d3 !important;
+}
+

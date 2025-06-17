@@ -121,7 +121,7 @@ function Completed() {
             onClick={() => {
               if (isLoggedIn) {
                 toggleAuth();
-                showNotification('Logout successful')        
+                showNotification('Logout successful!')        
               } else {
                 navigate('/login'); 
               }

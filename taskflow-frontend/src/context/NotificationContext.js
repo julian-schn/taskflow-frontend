@@ -8,7 +8,7 @@ export const NotificationProvider = ({ children }) => {
   const [message, setMessage] = useState('');
   const [visible, setVisible] = useState(false);
 
-  const showNotification = useCallback((msg, duration = 4000) => {
+  const showNotification = useCallback((msg, duration = 3500) => {
     setMessage(msg);
     setVisible(true);
     setTimeout(() => setVisible(false), duration);
