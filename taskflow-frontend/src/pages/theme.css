@@ -1,22 +1,19 @@
-
 body {
   background-color: #f7f7f7;
   color: #1e1e1e;
 }
 
-h1{
-    color: #1e1e1e;
+h1 {
+  color: #1e1e1e;
 }
 
-h2{
-    color:#1e1e1e;
+h2 {
+  color: #1e1e1e;
 }
 
 .task-input::placeholder {
-  color:#666666;
+  color: #666666;
 }
-
-
 
 .input-box,
 .task-box,
@@ -96,7 +93,6 @@ body:not(.dark-mode) .task-box {
   position: relative;
 }
 
-
 body:not(.dark-mode) .task-box:not(:last-child)::after {
   content: '';
   position: absolute;
@@ -105,8 +101,6 @@ body:not(.dark-mode) .task-box:not(:last-child)::after {
   right: 0;
   height: 1px;
   background-color: #1e1e1e;
-  border-bottom: none;
-
 }
 
 body:not(.dark-mode) .task-list {
@@ -115,8 +109,13 @@ body:not(.dark-mode) .task-list {
 }
 
 
+body:not(.dark-mode) .auth-icon {
+  filter: brightness(50%);
+}
 
-
+body:not(.dark-mode) .auth-button:hover .auth-icon {
+  filter: brightness(80%);
+}
 
 
 body.dark-mode {
@@ -124,7 +123,9 @@ body.dark-mode {
   color: #E9E0E0;
 }
 
-body.dark-mode h2 {
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode .no-tasks {
   color: #E9E0E0;
 }
 
@@ -144,12 +145,9 @@ body.dark-mode .task-checkbox:checked {
   background-color: #2A50B6;
   border-color: #2A50B6;
 }
-body.dark-mode .mode-icon {
-  filter: brightness(100%);
-}
 
 body.dark-mode .task-checkbox:checked::after {
-  border-color: #c5bdbd;
+  border-color: #ffffff;
 }
 
 body.dark-mode .filter-button {
@@ -160,28 +158,16 @@ body.dark-mode .filter-button.active {
   color: #3B5BA9;
 }
 
-body.dark-mode .no-tasks {
-  color: #E9E0E0;
-}
-
-body.dark-mode h1{
-    color: #E9E0E0;
-}
-
 body.dark-mode .icon {
   filter: brightness(100%);
-}
-
-body.dark-mode .task-input::placeholder {
-  color: #c5bdbd;
 }
 
 body.dark-mode .mode-icon {
   filter: brightness(100%);
 }
 
-body.dark-mode .task-input {
-  color: #E9E0E0;
+body.dark-mode .mode-icon:hover {
+  filter: brightness(200%);
 }
 
 body.dark-mode .edit-button:hover .icon,
@@ -190,8 +176,12 @@ body.dark-mode .move-button:hover .icon {
   filter: brightness(200%);
 }
 
-body.dark-mode .mode-icon:hover {
-  filter: brightness(200%);
+body.dark-mode .task-input {
+  color: #E9E0E0;
+}
+
+body.dark-mode .task-input::placeholder {
+  color: #c5bdbd;
 }
 
 body.dark-mode .task-box {

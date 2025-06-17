@@ -1,31 +1,29 @@
+// src/pages/Completed.js
 import React, { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import './Completed.css';
-import { NavLink } from 'react-router-dom';
 import deleteIcon from '../assets/delete_icon.svg';
 import editIcon from '../assets/edit_icon.svg';
 import arrowUp from '../assets/arrow_upward.svg';
 import arrowDown from '../assets/arrow_downward.svg';
 import lightIcon from '../assets/light_mode.svg';
 import darkIcon from '../assets/dark_mode.svg';
+import loginIcon from '../assets/loginIconsvg.svg';
+import logoutIcon from '../assets/logoutIcon.svg';
 import { useTasks } from '../context/TaskContext';
-import './theme.css';
 import { useTheme } from './ThemeContext';
-
+import { useAuth } from './AuthContext';
+import { useNotification } from '../context/NotificationContext';
 
 function Completed() {
-  const {
-    tasks,
-    toggleComplete,
-    deleteTask,
-    editTask,
-    startEdit,
-    moveTaskUp,
-    moveTaskDown
-  } = useTasks();
-
   const [editText, setEditText] = useState('');
   const [editingTaskId, setEditingTaskId] = useState(null);
-  const{darkMode, toggleMode} = useTheme();
+  const {showNotification } = useNotification();
+  const { darkMode, toggleMode } = useTheme();
+  const { isLoggedIn, toggleAuth } = useAuth();
+  const { tasks, toggleComplete, deleteTask, editTask, startEdit, moveTaskUp, moveTaskDown } = useTasks();
+  const navigate = useNavigate();
+
   const completedTasks = tasks.filter(task => task.completed);
 
   const handleSaveEdit = (taskId) => {
@@ -40,7 +38,6 @@ function Completed() {
     setEditText('');
     editTask(taskId, tasks.find(t => t.id === taskId).text);
   };
-
 
   return (
     <div className="completed">
@@ -66,8 +63,8 @@ function Completed() {
                   autoFocus
                   value={editText}
                   maxLength={50}
-                  onChange={(e) => setEditText(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSaveEdit(task.id)}
+                  onChange={e => setEditText(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleSaveEdit(task.id)}
                   onBlur={() => cancelEdit(task.id)}
                 />
               ) : (
@@ -118,6 +115,25 @@ function Completed() {
       )}
 
       <div className="filter-container">
+        <div className="auth-buttons">
+          <button
+            className="auth-button"
+            onClick={() => {
+              if (isLoggedIn) {
+                toggleAuth();
+                showNotification('Logout successful')        
+              } else {
+                navigate('/login'); 
+              }
+            }}
+          >
+            <img
+              src={isLoggedIn ? logoutIcon : loginIcon}
+              alt={isLoggedIn ? 'Logout' : 'Login'}
+              className="auth-icon"
+            />
+          </button>
+        </div>
         <div className="filter-buttons">
           <NavLink to="/" end className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>
             All

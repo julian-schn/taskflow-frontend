@@ -1,31 +1,29 @@
+// src/pages/Home.js
 import React, { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import './Home.css';
 import deleteIcon from '../assets/delete_icon.svg';
 import editIcon from '../assets/edit_icon.svg';
-import { NavLink } from 'react-router-dom';
-import { useTasks } from '../context/TaskContext';
 import arrowUp from '../assets/arrow_upward.svg';
 import arrowDown from '../assets/arrow_downward.svg';
 import lightIcon from '../assets/light_mode.svg';
 import darkIcon from '../assets/dark_mode.svg';
-import './theme.css';
-import {useTheme} from './ThemeContext.js';
+import loginIcon from '../assets/loginIconsvg.svg';
+import logoutIcon from '../assets/logoutIcon.svg';
+import { useTasks } from '../context/TaskContext';
+import { useTheme } from './ThemeContext';
+import { useAuth } from './AuthContext';
+import { useNotification } from '../context/NotificationContext';
+
 function Home() {
   const [taskInput, setTaskInput] = useState('');
   const [editText, setEditText] = useState('');
   const [editingTaskId, setEditingTaskId] = useState(null);
-  const {darkMode, toggleMode} =useTheme();
-
-  const {
-    tasks,
-    addTask,
-    deleteTask,
-    toggleComplete,
-    editTask,
-    startEdit,
-    moveTaskUp,
-    moveTaskDown
-  } = useTasks();
+  const {showNotification } = useNotification();
+  const { darkMode, toggleMode } = useTheme();
+  const { isLoggedIn, toggleAuth } = useAuth();
+  const { tasks, addTask, deleteTask, toggleComplete, editTask, startEdit, moveTaskUp, moveTaskDown } = useTasks();
+  const navigate = useNavigate();
 
   const handleAddTask = () => {
     if (taskInput.trim() === '') return;
@@ -48,7 +46,6 @@ function Home() {
 
   const visibleTasks = tasks.filter(task => !task.completed);
 
-
   return (
     <div className="home">
       <h1>taskflow.</h1>
@@ -60,8 +57,8 @@ function Home() {
           placeholder="Add a new task"
           value={taskInput}
           maxLength={50}
-          onChange={(e) => setTaskInput(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleAddTask()}
+          onChange={e => setTaskInput(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && handleAddTask()}
         />
         <button className="box-button" onClick={handleAddTask}>Add</button>
       </div>
@@ -85,8 +82,8 @@ function Home() {
                   autoFocus
                   value={editText}
                   maxLength={50}
-                  onChange={(e) => setEditText(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSaveEdit(task.id)}
+                  onChange={e => setEditText(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleSaveEdit(task.id)}
                   onBlur={() => cancelEdit(task.id)}
                 />
               ) : (
@@ -137,9 +134,32 @@ function Home() {
       )}
 
       <div className="filter-container">
+        <div className="auth-buttons">
+          <button
+            className="auth-button"
+            onClick={() => {
+              if (isLoggedIn) {
+                toggleAuth();
+                showNotification('Logout successful')       
+              } else {
+                navigate('/login'); 
+              }
+            }}
+          >
+            <img
+              src={isLoggedIn ? logoutIcon : loginIcon}
+              alt={isLoggedIn ? 'Logout' : 'Login'}
+              className="auth-icon"
+            />
+          </button>
+        </div>
         <div className="filter-buttons">
-          <NavLink to="/" end className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>All</NavLink>
-          <NavLink to="/completed" className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>Completed</NavLink>
+          <NavLink to="/" end className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>
+            All
+          </NavLink>
+          <NavLink to="/completed" className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>
+            Completed
+          </NavLink>
         </div>
         <div className="mode-buttons">
           <button className="mode" onClick={toggleMode}>
