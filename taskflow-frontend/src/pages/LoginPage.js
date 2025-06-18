@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import { useNotification } from '../context/NotificationContext';
+import CloseIcon from '../assets/close.svg';
 import './LoginPage.css';
 
 function LoginPage() {
@@ -41,6 +42,10 @@ function LoginPage() {
 
   return (
     <div className="login-page">
+      <button className="close-button" onClick={() => navigate('/')} aria-label="Close">
+        <img src={CloseIcon} alt="Close" />
+      </button>
+
       <h1>Login</h1>
       <form className="login-form" onSubmit={handleSubmit} noValidate>
         <div className="form-group">
@@ -66,8 +71,10 @@ function LoginPage() {
         <button type="submit">Login</button>
         <p className="signup-text">
           Don't have an account?{' '}
-          <button type="button" className="link-button">Sign Up</button>
-          </p>
+          <button type="button" className="link-button" onClick={() => navigate('/signup')}>
+            Sign Up
+          </button>
+        </p>
       </form>
     </div>
   );
