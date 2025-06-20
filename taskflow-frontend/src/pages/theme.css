@@ -1,95 +1,27 @@
+/* === Light Mode === */
 body {
   background-color: #f7f7f7;
   color: #1e1e1e;
 }
 
-h1 {
-  color: #1e1e1e;
-}
-
+h1,
 h2 {
   color: #1e1e1e;
 }
 
-.task-input::placeholder {
+body:not(.dark-mode) .task-input::placeholder {
   color: #666666;
 }
 
-.input-box,
-.task-box,
-.task-list {
-  background-color: #ffffff;
-  color: #1e1e1e;
-  border-color: #1e1e1e;
-}
-
-.task-checkbox {
-  border-color: #999999;
-}
-
-.task-checkbox:checked {
-  background-color: #3B5BA9;
-  border-color: #3B5BA9;
-}
-
-.task-checkbox:checked::after {
-  border-color: #ffffff;
-}
-
-.filter-button {
-  color: #666666;
-}
-
-.filter-button.active {
-  color: #2A50B6;
-}
-
-.no-tasks {
-  color: #1e1e1e;
-}
-
-.icon {
-  filter: brightness(100%);
-}
-
-.mode-icon {
-  filter: brightness(50%);
-}
-
-body:not(.dark-mode) .icon {
-  filter: brightness(50%);
-}
-
-.task-input {
-  color: #1e1e1e;
-}
-
-body:not(.dark-mode) .edit-button:hover .icon,
-body:not(.dark-mode) .delete-button:hover .icon,
-body:not(.dark-mode) .move-button:hover .icon {
-  filter: brightness(80%);
-}
-
-body:not(.dark-mode) .mode-icon:hover {
-  filter: brightness(80%);
-}
-
-body:not(.dark-mode) .task-box {
-  background-color: #ffffff;
-  color: #1e1e1e;
-  border-color: #1e1e1e;
-}
-
-body:not(.dark-mode) .input-box {
+body:not(.dark-mode) .input-box,
+body:not(.dark-mode) .task-box,
+body:not(.dark-mode) .task-list {
   background-color: #ffffff;
   color: #1e1e1e;
   border-color: #1e1e1e;
 }
 
 body:not(.dark-mode) .task-box {
-  background-color: #ffffff;
-  color: #1e1e1e;
-  border-color: #1e1e1e;
   position: relative;
 }
 
@@ -108,6 +40,48 @@ body:not(.dark-mode) .task-list {
   border-radius: 10px;
 }
 
+body:not(.dark-mode) .task-checkbox {
+  border-color: #999999;
+}
+
+body:not(.dark-mode) .task-checkbox:checked {
+  background-color: #3B5BA9;
+  border-color: #3B5BA9;
+}
+
+body:not(.dark-mode) .task-checkbox:checked::after {
+  border-color: #ffffff;
+}
+
+body:not(.dark-mode) .filter-button {
+  color: #666666;
+}
+
+body:not(.dark-mode) .filter-button.active {
+  color: #2A50B6;
+}
+
+body:not(.dark-mode) .no-tasks {
+  color: #1e1e1e;
+}
+
+body:not(.dark-mode) .icon {
+  filter: brightness(50%);
+}
+
+body:not(.dark-mode) .edit-button:hover .icon,
+body:not(.dark-mode) .delete-button:hover .icon,
+body:not(.dark-mode) .move-button:hover .icon {
+  filter: brightness(80%);
+}
+
+body:not(.dark-mode) .mode-icon {
+  filter: brightness(50%);
+}
+
+body:not(.dark-mode) .mode-icon:hover {
+  filter: brightness(80%);
+}
 
 body:not(.dark-mode) .auth-icon {
   filter: brightness(50%);
@@ -117,7 +91,11 @@ body:not(.dark-mode) .auth-button:hover .auth-icon {
   filter: brightness(80%);
 }
 
+body:not(.dark-mode) .close-button img {
+  filter: brightness(50%);
+}
 
+/* === Dark Mode === */
 body.dark-mode {
   background-color: #202831;
   color: #E9E0E0;
@@ -196,4 +174,80 @@ body.dark-mode .task-box:not(:last-child)::after {
   right: 0;
   height: 1px;
   background-color: #c5bdbd;
+}
+
+body.dark-mode .link-button {
+  color: #2A50B6 !important;
+}
+
+body.dark-mode .link-button:hover {
+  color: #4d73d3 !important;
+}
+
+body.dark-mode .login-form input {
+  background-color: #1f2128;
+  border: 1px solid #c5bdbd;
+  color: #E9E0E0;
+}
+
+body.dark-mode .login-form input::placeholder {
+  color: #c5bdbd;
+}
+
+body.dark-mode .login-form button {
+  background-color: #2A50B6;
+  color: #E9E0E0;
+}
+
+body.dark-mode .login-form button:hover {
+  background-color: #3B5BA9;
+}
+
+body.dark-mode .error-message {
+  color: #ff7a7a;
+}
+
+body.dark-mode .input-error {
+  border: 1px solid #ff7a7a !important;
+  background-color: #3a1f1f;
+}
+
+body.dark-mode .close-button img {
+  filter: brightness(100%);
+}
+
+body:not(.dark-mode) .login-form input {
+  background-color: #ffffff;
+  border: 1px solid #1e1e1e;
+  color: #1e1e1e;
+}
+
+body:not(.dark-mode) .login-form input::placeholder {
+  color: #666666;
+}
+
+body:not(.dark-mode) .login-form button {
+  background-color: #3B5BA9;
+  color: #E9E0E0;
+}
+
+body:not(.dark-mode) .login-form button:hover {
+  background-color: #2e4786;
+}
+
+body:not(.dark-mode) .input-error {
+  border: 1px solid red !important;
+  background-color: #ffe6e6;
+}
+
+body:not(.dark-mode) .error-message {
+  color: red;
+}
+
+body:not(.dark-mode) .link-button {
+  color: #3B5BA9 !important;
+}
+
+body:not(.dark-mode) .link-button:hover {
+  color: #28417f !important;
 }

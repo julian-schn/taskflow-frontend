@@ -1,19 +1,17 @@
-
 .login-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 80px;
   min-height: 100vh;
+  position: relative;
   background-color: transparent;
   color: inherit;
 }
 
 .login-page h1 {
- font-size: 40px;
- margin-bottom: 30px;
-
-  color: #1e1e1e;
+  font-size: 40px;
+  margin-bottom: 30px;
 }
 
 .login-form {
@@ -29,13 +27,6 @@
   font-size: 16px;
   border-radius: 6px;
   outline: none;
-  background-color: #ffffff;
-  border: 1px solid #1e1e1e;    
-  color: #1e1e1e;              
-}
-
-.login-form input::placeholder {
-  color: #666666;             
 }
 
 .login-form button {
@@ -43,40 +34,8 @@
   font-size: 16px;
   border: none;
   border-radius: 6px;
-  background-color: #3B5BA9;
-  color: #E9E0E0;
   cursor: pointer;
   transition: background-color 0.2s ease;
-}
-
-.login-form button:hover {
-  background-color: #2e4786;
-}
-
-
-
-body.dark-mode .login-page {
-
-  color: inherit;
-}
-
-body.dark-mode .login-form input {
-  background-color: #1f2128;   
-  border: 1px solid #c5bdbd;    
-  color: #E9E0E0;             
-}
-
-body.dark-mode .login-form input::placeholder {
-  color: #c5bdbd;
-}
-
-body.dark-mode .login-form button {
-  background-color: #2A50B6;
-  color: #E9E0E0;
-}
-
-body.dark-mode .login-form button:hover {
-  background-color: #3B5BA9;
 }
 
 .form-group {
@@ -85,28 +44,13 @@ body.dark-mode .login-form button:hover {
 }
 
 .error-message {
-  color: red; 
   font-size: 14px;
   margin-bottom: 4px;
   margin-left: 4px;
 }
-
 
 .input-error {
   border: 1px solid red !important;
-  background-color: #ffe6e6;
-}
-
-body.dark-mode .error-message{
-  color: #ff7a7a ;
-  font-size: 14px;
-  margin-bottom: 4px;
-  margin-left: 4px;
-}
-
-body.dark-mode .input-error {
-  border: 1px solid #ff7a7a !important;
-  background-color: #3a1f1f;
 }
 
 .signup-text {
@@ -116,7 +60,6 @@ body.dark-mode .input-error {
 
 .link-button {
   all: unset !important;
-  color: #3B5BA9 !important;
   text-decoration: underline !important;
   cursor: pointer !important;
   font-size: 15px !important;
@@ -124,36 +67,23 @@ body.dark-mode .input-error {
   transition: color 0.2s ease !important;
 }
 
-.link-button:hover {
-  color: #28417f !important;
-}
-
-body.dark-mode .link-button {
-  color: #2A50B6 !important;
-}
-
-body.dark-mode .link-button:hover {
-  color: #4d73d3 !important;
-}
-
-.login-page {
-  position: relative; 
-}
-
 .close-button {
-  position: absolute;
+  position: fixed;
   top: 24px;
   right: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
-  z-index: 10;
+  z-index: 999;
 }
 
 .close-button img {
-  width: 20px;
-  height: 20px;
+  width: 32px;
+  height: 32px;
   opacity: 0.7;
   transition: opacity 0.2s ease;
 }
