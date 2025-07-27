@@ -1,0 +1,13 @@
+.notification-banner {
+  position: fixed;
+  bottom: 65px;
+  right: 24px; 
+  background-color: #4CAF50;
+  color: #E9E0E0;
+  padding: 12px 24px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 1000;
+  font-family: sans-serif;
+  white-space: nowrap; 
+}

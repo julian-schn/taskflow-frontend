@@ -1,0 +1,93 @@
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 80px;
+  min-height: 100vh;
+  position: relative;
+  background-color: transparent;
+  color: inherit;
+}
+
+.login-page h1 {
+  font-size: 40px;
+  margin-bottom: 30px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.login-form input {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  outline: none;
+}
+
+.login-form button {
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.error-message {
+  font-size: 14px;
+  margin-bottom: 4px;
+  margin-left: 4px;
+}
+
+.input-error {
+  border: 1px solid red !important;
+}
+
+.signup-text {
+  text-align: center;
+  font-size: 15px;
+}
+
+.link-button {
+  all: unset !important;
+  text-decoration: underline !important;
+  cursor: pointer !important;
+  font-size: 15px !important;
+  font-family: inherit !important;
+  transition: color 0.2s ease !important;
+}
+
+.close-button {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 999;
+}
+
+.close-button img {
+  width: 32px;
+  height: 32px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.close-button:hover img {
+  opacity: 1;
+}

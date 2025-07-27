@@ -1,0 +1,217 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.completed {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.completed h1 {
+  font-size: 48px;
+  margin: 48px 0 40px;
+}
+
+.completed h2 {
+  font-size: 28px;
+  margin: 0 0 5px;
+}
+
+.task-list {
+  margin-top: 25px;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+}
+
+.task-box {
+  position: relative;
+  padding: 5px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  font-family: sans-serif;
+  background-color: #1f2128;
+}
+
+.task-box:first-child {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.task-box:last-child {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.task-box:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+}
+
+.task-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 23px;
+  height: 23px;
+  border: 1.5px solid #c5bdbd;
+  border-radius: 6px;
+  background-color: transparent;
+  cursor: pointer;
+  margin-right: 10px;
+  position: relative;
+}
+
+.task-checkbox:checked {
+  background-color: #2A50B6;
+  border-color: #2A50B6;
+}
+
+.task-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 7px;
+  width: 5px;
+  height: 10px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.task-input {
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  outline: none;
+  flex: 1;
+  margin-right: 12px;
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.edit-button,
+.delete-button,
+.move-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.icon {
+  width: 27px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.icon:hover {
+  filter: brightness(200%);
+}
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto 50px;
+  height: 40px;
+}
+
+.auth-buttons,
+.mode-buttons {
+  flex: 0 0 auto;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 24px;
+  font-size: 18px;
+  font-family: sans-serif;
+  flex: 0 0 auto;
+}
+
+.filter-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  padding: 5px;
+}
+
+.filter-button.active {
+  font-weight: 500;
+}
+
+.filter-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #3B5BA9;
+  border-radius: 1px;
+}
+
+.auth-button,
+.mode {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.auth-icon,
+.mode-icon {
+  width: 25px;
+  height: 25px;
+  transition: filter 0.2s ease;
+}
+
+.auth-icon:hover,
+.mode-icon:hover{
+  filter: brightness(200%);
+}
+
+.save-button {
+  background: none;
+  border: none;
+  color: #4CAF50;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.save-button:hover {
+  filter: brightness(150%);
+}
+
+.no-tasks {
+  margin-top: 40px;   
+  text-align: center;
+  font-family: sans-serif;
+}
