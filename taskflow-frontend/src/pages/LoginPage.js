@@ -10,7 +10,7 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const { toggleAuth } = useAuth();
+  const { login, loading } = useAuth();
   const { showNotification } = useNotification();
 
   const validate = () => {
@@ -20,16 +20,22 @@ function LoginPage() {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-    toggleAuth();
-    showNotification('Login successful!');
-    navigate('/');
+
+    const result = await login(username, password);
+    if (result.success) {
+      showNotification('Login successful!');
+      navigate('/');
+    } else {
+      setErrors({ general: result.error });
+      showNotification('Login failed: ' + result.error);
+    }
   };
 
   const handleInputChange = (field, value) => {
@@ -56,19 +62,24 @@ function LoginPage() {
             value={username}
             onChange={(e) => handleInputChange('username', e.target.value)}
             className={errors.username ? 'input-error' : ''}
+            disabled={loading}
           />
         </div>
         <div className="form-group">
           {errors.password && <div className="error-message">{errors.password}</div>}
           <input
             type="password"
-            placeholder="Passwort"
+            placeholder="Password"
             value={password}
             onChange={(e) => handleInputChange('password', e.target.value)}
             className={errors.password ? 'input-error' : ''}
+            disabled={loading}
           />
         </div>
-        <button type="submit">Login</button>
+        {errors.general && <div className="error-message">{errors.general}</div>}
+          <button type="submit" disabled={loading}>
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
         <p className="signup-text">
           Don't have an account?{' '}
           <button type="button" className="link-button" onClick={() => navigate('/signup')}>

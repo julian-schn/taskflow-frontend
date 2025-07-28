@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import CloseIcon from '../assets/close.svg';
 import './LoginPage.css';
@@ -10,6 +11,7 @@ export default function SignUpPage() {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const { register, loading } = useAuth();
   const { showNotification } = useNotification();
 
   const validate = () => {
@@ -24,20 +26,33 @@ export default function SignUpPage() {
       newErrors.email = 'Invalid email format';
     }
 
-    if (!password.trim()) newErrors.password = 'Password is required';
+    if (!password.trim()) {
+      newErrors.password = 'Password is required';
+    } else if (password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters';
+    } else if (!/(?=.*[a-zA-Z])(?=.*\d)/.test(password)) {
+      newErrors.password = 'Password must contain letters and numbers';
+    }
 
     return newErrors;
   };
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-    showNotification('Sign Up successful');
-    navigate('/login');
+
+    const result = await register(username, password);
+    if (result.success) {
+      showNotification('Registration successful! You are now logged in.');
+      navigate('/');
+    } else {
+      setErrors({ general: result.error });
+      showNotification('Registration failed: ' + result.error);
+    }
   };
 
   const handleInputChange = (field, value) => {
@@ -65,6 +80,7 @@ export default function SignUpPage() {
             value={username}
             onChange={(e) => handleInputChange('username', e.target.value)}
             className={errors.username ? 'input-error' : ''}
+            disabled={loading}
           />
         </div>
         <div className="form-group">
@@ -75,19 +91,24 @@ export default function SignUpPage() {
             value={email}
             onChange={(e) => handleInputChange('email', e.target.value)}
             className={errors.email ? 'input-error' : ''}
+            disabled={loading}
           />
         </div>
         <div className="form-group">
           {errors.password && <div className="error-message">{errors.password}</div>}
           <input
             type="password"
-            placeholder="Passwort"
+            placeholder="Password"
             value={password}
             onChange={(e) => handleInputChange('password', e.target.value)}
             className={errors.password ? 'input-error' : ''}
+            disabled={loading}
           />
         </div>
-        <button type="submit">Sign Up</button>
+        {errors.general && <div className="error-message">{errors.general}</div>}
+        <button type="submit" disabled={loading}>
+          {loading ? 'Creating account...' : 'Sign Up'}
+        </button>
         <p className="signup-text">
           Already have an account?{' '}
           <button type="button" className="link-button" onClick={() => navigate('/login')}>

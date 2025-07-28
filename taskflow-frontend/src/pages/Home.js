@@ -21,13 +21,13 @@ function Home() {
   const [editingTaskId, setEditingTaskId] = useState(null);
   const {showNotification } = useNotification();
   const { darkMode, toggleMode } = useTheme();
-  const { isLoggedIn, toggleAuth } = useAuth();
-  const { tasks, addTask, deleteTask, toggleComplete, editTask, startEdit, moveTaskUp, moveTaskDown } = useTasks();
+  const { isLoggedIn, user, logout } = useAuth();
+  const { tasks, addTask, deleteTask, toggleComplete, editTask, startEdit, moveTaskUp, moveTaskDown, loading, error } = useTasks();
   const navigate = useNavigate();
 
-  const handleAddTask = () => {
+  const handleAddTask = async () => {
     if (taskInput.trim() === '') return;
-    addTask(taskInput);
+    await addTask(taskInput);
     setTaskInput('');
   };
 
@@ -50,24 +50,58 @@ function Home() {
     <div className="home">
       <h1>taskflow.</h1>
 
+      {/* Show user info if logged in */}
+      {isLoggedIn && user && (
+        <div className="user-info" style={{ marginBottom: '1rem', textAlign: 'center', color: '#666' }}>
+          Welcome back, {user.username}!
+        </div>
+      )}
+
+      {/* Show error if there's an API error */}
+      {error && (
+        <div className="error-banner" style={{ 
+          marginBottom: '1rem', 
+          padding: '0.5rem', 
+          backgroundColor: '#ffe6e6', 
+          border: '1px solid #ffcccc', 
+          borderRadius: '4px',
+          color: '#d32f2f',
+          textAlign: 'center'
+        }}>
+          {error}
+        </div>
+      )}
+
       <div className="input-box">
         <input
           type="text"
           className="task-input"
-          placeholder="Add a new task"
+          placeholder={isLoggedIn ? "Add a new task" : "Please login to add tasks"}
           value={taskInput}
           maxLength={50}
           onChange={e => setTaskInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleAddTask()}
+          disabled={!isLoggedIn || loading}
         />
-        <button className="box-button" onClick={handleAddTask}>Add</button>
+        <button className="box-button" onClick={handleAddTask} disabled={!isLoggedIn || loading}>
+          {loading ? 'Adding...' : 'Add'}
+        </button>
       </div>
 
       {visibleTasks.length === 0 ? (
         <p className="no-tasks">No tasks yet.</p>
       ) : (
         <div className="task-list">
-          {visibleTasks.map((task, index) => (
+          {!isLoggedIn ? (
+            <div className="login-prompt">
+              <p>Please <button className="link-button" onClick={() => navigate('/login')}>login</button> to view your tasks.</p>
+            </div>
+          ) : loading ? (
+            <div className="loading-message">Loading tasks...</div>
+          ) : visibleTasks.length === 0 ? (
+            <div className="no-tasks">No tasks yet. Add one above!</div>
+          ) : (
+            visibleTasks.map((task, index) => (
             <div key={task.id} className="task-box">
               <input
                 type="checkbox"
@@ -129,7 +163,8 @@ function Home() {
                 </button>
               </div>
             </div>
-          ))}
+          ))
+          )}
         </div>
       )}
 
@@ -139,8 +174,8 @@ function Home() {
             className="auth-button"
             onClick={() => {
               if (isLoggedIn) {
-                toggleAuth();
-                showNotification('Logout successful!')       
+                logout();
+                showNotification('Logout successful!');
               } else {
                 navigate('/login'); 
               }

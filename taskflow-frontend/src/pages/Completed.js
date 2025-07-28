@@ -20,8 +20,8 @@ function Completed() {
   const [editingTaskId, setEditingTaskId] = useState(null);
   const {showNotification } = useNotification();
   const { darkMode, toggleMode } = useTheme();
-  const { isLoggedIn, toggleAuth } = useAuth();
-  const { tasks, toggleComplete, deleteTask, editTask, startEdit, moveTaskUp, moveTaskDown } = useTasks();
+  const { isLoggedIn, user, logout } = useAuth();
+  const { tasks, toggleComplete, deleteTask, editTask, startEdit, moveTaskUp, moveTaskDown, loading, error } = useTasks();
   const navigate = useNavigate();
 
   const completedTasks = tasks.filter(task => task.completed);
@@ -42,9 +42,44 @@ function Completed() {
   return (
     <div className="completed">
       <h1>taskflow.</h1>
+
+      {/* Show user info if logged in */}
+      {isLoggedIn && user && (
+        <div className="user-info" style={{ marginBottom: '1rem', textAlign: 'center', color: '#666' }}>
+          Welcome back, {user.username}!
+        </div>
+      )}
+
+      {/* Show error if there's an API error */}
+      {error && (
+        <div className="error-banner" style={{ 
+          marginBottom: '1rem', 
+          padding: '0.5rem', 
+          backgroundColor: '#ffe6e6', 
+          border: '1px solid #ffcccc', 
+          borderRadius: '4px',
+          color: '#d32f2f',
+          textAlign: 'center'
+        }}>
+          {error}
+        </div>
+      )}
+
       <h2>Completed Tasks:</h2>
 
-      {completedTasks.length === 0 ? (
+      {!isLoggedIn ? (
+        <div className="login-prompt" style={{ textAlign: 'center', margin: '2rem 0' }}>
+          <p>Please <button className="link-button" onClick={() => navigate('/login')} style={{ 
+            background: 'none', 
+            border: 'none', 
+            color: '#007bff', 
+            textDecoration: 'underline', 
+            cursor: 'pointer' 
+          }}>login</button> to view your completed tasks.</p>
+        </div>
+      ) : loading ? (
+        <div className="loading-message" style={{ textAlign: 'center', margin: '2rem 0' }}>Loading tasks...</div>
+      ) : completedTasks.length === 0 ? (
         <p className="no-tasks">No completed tasks yet.</p>
       ) : (
         <div className="task-list">
@@ -120,8 +155,8 @@ function Completed() {
             className="auth-button"
             onClick={() => {
               if (isLoggedIn) {
-                toggleAuth();
-                showNotification('Logout successful!')        
+                logout();
+                showNotification('Logout successful!');
               } else {
                 navigate('/login'); 
               }
