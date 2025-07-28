@@ -94,26 +94,127 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  // Note: The backend doesn't have update/toggle endpoints, so these work locally only
-  // You might want to add these endpoints to your backend or implement them differently
-  const toggleComplete = (id) => {
+  // Toggle task completion status via API
+  const toggleComplete = async (id) => {
+    if (!token) {
+      setError('Authentication required');
+      return;
+    }
+
+    // Find the task to toggle
+    const taskToToggle = tasks.find(task => task.id === id);
+    if (!taskToToggle) {
+      setError('Task not found');
+      return;
+    }
+
+    // Optimistically update the UI first
     setTasks(prev =>
       prev.map(task =>
         task.id === id ? { ...task, completed: !task.completed } : task
       )
     );
-    // TODO: Add API call to update task status when backend supports it
-    console.warn('toggleComplete: Local update only - backend update not implemented');
+
+    try {
+      // Call the toggle API
+      const updatedTask = await todoAPI.toggle(id, token);
+      
+      // Update with the server response
+      setTasks(prev =>
+        prev.map(task =>
+          task.id === id ? {
+            ...task,
+            completed: updatedTask.status === 'COMPLETED',
+            updatedAt: updatedTask.updatedAt
+          } : task
+        )
+      );
+      
+    } catch (error) {
+      console.error('Failed to toggle task:', error);
+      
+      // Revert the optimistic update on error
+      setTasks(prev =>
+        prev.map(task =>
+          task.id === id ? { ...task, completed: taskToToggle.completed } : task
+        )
+      );
+      
+      // Show user-friendly error
+      if (error.message.includes('404')) {
+        setError('Task not found. It may have been deleted.');
+      } else if (error.message.includes('401') || error.message.includes('403')) {
+        setError('You are not authorized to modify this task.');
+      } else {
+        setError('Failed to update task status. Please try again.');
+      }
+    }
   };
 
-  const editTask = (id, newText) => {
+  // Edit task title via API
+  const editTask = async (id, newText) => {
+    if (!token) {
+      setError('Authentication required');
+      return;
+    }
+
+    // Find the task to edit
+    const taskToEdit = tasks.find(task => task.id === id);
+    if (!taskToEdit) {
+      setError('Task not found');
+      return;
+    }
+
+    // Optimistically update the UI first
     setTasks(prev =>
       prev.map(task =>
         task.id === id ? { ...task, text: newText, isEditing: false } : task
       )
     );
-    // TODO: Add API call to update task when backend supports it
-    console.warn('editTask: Local update only - backend update not implemented');
+
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // Call the update API
+      const updatedTask = await todoAPI.update(id, newText, token);
+      
+      // Update with the server response
+      setTasks(prev =>
+        prev.map(task =>
+          task.id === id ? {
+            ...task,
+            text: updatedTask.title,
+            description: updatedTask.description,
+            updatedAt: updatedTask.updatedAt,
+            isEditing: false
+          } : task
+        )
+      );
+      
+    } catch (error) {
+      console.error('Failed to edit task:', error);
+      
+      // Revert the optimistic update on error
+      setTasks(prev =>
+        prev.map(task =>
+          task.id === id ? { ...task, text: taskToEdit.text, isEditing: false } : task
+        )
+      );
+      
+      // Show user-friendly error
+      if (error.message.includes('404')) {
+        setError('Task not found. It may have been deleted.');
+      } else if (error.message.includes('401') || error.message.includes('403')) {
+        setError('You are not authorized to edit this task.');
+      } else if (error.message.includes('400')) {
+        setError('Title is too long (max 100 characters) or validation failed.');
+      } else {
+        setError('Failed to update task. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const startEdit = (id) => {

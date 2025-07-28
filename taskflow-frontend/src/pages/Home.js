@@ -31,9 +31,9 @@ function Home() {
     setTaskInput('');
   };
 
-  const handleSaveEdit = (taskId) => {
+  const handleSaveEdit = async (taskId) => {
     if (editText.trim() === '') return;
-    editTask(taskId, editText);
+    await editTask(taskId, editText);
     setEditingTaskId(null);
     setEditText('');
   };

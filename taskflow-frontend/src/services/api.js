@@ -175,6 +175,34 @@ export const todoAPI = {
       method: 'DELETE',
       headers: getAuthHeaders(token)
     });
+  },
+
+  /**
+   * Update todo title
+   * @param {string} id - Todo ID
+   * @param {string} title - New title (max 100 chars)
+   * @param {string} token - JWT token
+   * @returns {Promise<Todo>}
+   */
+  update: async (id, title, token) => {
+    return await apiRequest(`/api/todos/${id}`, {
+      method: 'PUT',
+      headers: getAuthHeaders(token),
+      body: JSON.stringify({ title })
+    });
+  },
+
+  /**
+   * Toggle todo status between PENDING and COMPLETED
+   * @param {string} id - Todo ID
+   * @param {string} token - JWT token
+   * @returns {Promise<Todo>}
+   */
+  toggle: async (id, token) => {
+    return await apiRequest(`/api/todos/${id}/toggle`, {
+      method: 'PUT',
+      headers: getAuthHeaders(token)
+    });
   }
 };
 
@@ -293,7 +321,27 @@ try {
   console.error('Failed to fetch todos:', error.message);
 }
 
-// 5. Check API health
+// 5. Toggle todo status (PENDING ↔ COMPLETED)
+try {
+  const token = localStorage.getItem('authToken');
+  const todoId = 'your-todo-id';
+  const updatedTodo = await todoAPI.toggle(todoId, token);
+  console.log('Toggled todo:', updatedTodo);
+} catch (error) {
+  console.error('Failed to toggle todo:', error.message);
+}
+
+// 6. Update todo title
+try {
+  const token = localStorage.getItem('authToken');
+  const todoId = 'your-todo-id';
+  const updatedTodo = await todoAPI.update(todoId, 'New title', token);
+  console.log('Updated todo title:', updatedTodo);
+} catch (error) {
+  console.error('Failed to update title:', error.message);
+}
+
+// 7. Check API health
 const isHealthy = await checkApiHealth();
 console.log('API is healthy:', isHealthy);
 
