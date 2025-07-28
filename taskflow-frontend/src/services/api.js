@@ -20,8 +20,24 @@ const getAuthHeaders = (token) => ({
 // Helper function to handle API responses
 const handleResponse = async (response) => {
   if (!response.ok) {
-    const error = await response.text();
-    throw new Error(error || `HTTP ${response.status}: ${response.statusText}`);
+    let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+    
+    try {
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        const errorData = await response.json();
+        // Extract error message from various possible formats
+        errorMessage = errorData.error || errorData.message || errorData.detail || errorMessage;
+      } else {
+        const textError = await response.text();
+        if (textError) errorMessage = textError;
+      }
+    } catch (parseError) {
+      // If we can't parse the error response, use the default message
+      console.warn('Could not parse error response:', parseError);
+    }
+    
+    throw new Error(errorMessage);
   }
   
   // Handle different response types

@@ -39,7 +39,22 @@ export const AuthProvider = ({ children }) => {
       return { success: true };
     } catch (error) {
       console.error('Login failed:', error);
-      return { success: false, error: error.message };
+      
+      // Provide user-friendly error messages
+      let userMessage = 'Login failed. Please try again.';
+      
+      if (error.message.includes('401') || error.message.includes('Unauthorized') || 
+          error.message.includes('Invalid credentials') || error.message.includes('unauthorized')) {
+        userMessage = 'Invalid username or password. Please check your credentials and try again.';
+      } else if (error.message.includes('429') || error.message.includes('rate limit')) {
+        userMessage = 'Too many login attempts. Please wait a moment before trying again.';
+      } else if (error.message.includes('network') || error.message.includes('fetch')) {
+        userMessage = 'Network error. Please check your connection and try again.';
+      } else if (error.message.includes('An unexpected error occurred')) {
+        userMessage = 'Invalid username or password. Please check your credentials and try again.';
+      }
+      
+      return { success: false, error: userMessage };
     } finally {
       setLoading(false);
     }
@@ -62,7 +77,22 @@ export const AuthProvider = ({ children }) => {
       return { success: true };
     } catch (error) {
       console.error('Registration failed:', error);
-      return { success: false, error: error.message };
+      
+      // Provide user-friendly error messages
+      let userMessage = 'Registration failed. Please try again.';
+      
+      if (error.message.includes('409') || error.message.includes('already exists') || 
+          error.message.includes('Username already exists')) {
+        userMessage = 'Username already exists. Please choose a different username.';
+      } else if (error.message.includes('400') || error.message.includes('validation')) {
+        userMessage = 'Invalid input. Please check that your password is at least 8 characters with letters and numbers.';
+      } else if (error.message.includes('429') || error.message.includes('rate limit')) {
+        userMessage = 'Too many registration attempts. Please wait a moment before trying again.';
+      } else if (error.message.includes('network') || error.message.includes('fetch')) {
+        userMessage = 'Network error. Please check your connection and try again.';
+      }
+      
+      return { success: false, error: userMessage };
     } finally {
       setLoading(false);
     }
