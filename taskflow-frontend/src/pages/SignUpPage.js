@@ -7,7 +7,6 @@ import './LoginPage.css';
 
 export default function SignUpPage() {
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
@@ -16,15 +15,8 @@ export default function SignUpPage() {
 
   const validate = () => {
     const newErrors = {};
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!username.trim()) newErrors.username = 'Username is required';
-
-    if (!email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!emailRegex.test(email)) {
-      newErrors.email = 'Invalid email format';
-    }
 
     if (!password.trim()) {
       newErrors.password = 'Password is required';
@@ -60,7 +52,6 @@ export default function SignUpPage() {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
     if (field === 'username') setUsername(value);
-    if (field === 'email') setEmail(value);
     if (field === 'password') setPassword(value);
   };
 
@@ -83,17 +74,7 @@ export default function SignUpPage() {
             disabled={loading}
           />
         </div>
-        <div className="form-group">
-          {errors.email && <div className="error-message">{errors.email}</div>}
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => handleInputChange('email', e.target.value)}
-            className={errors.email ? 'input-error' : ''}
-            disabled={loading}
-          />
-        </div>
+
         <div className="form-group">
           {errors.password && <div className="error-message">{errors.password}</div>}
           <input
