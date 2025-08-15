@@ -95,6 +95,11 @@ body:not(.dark-mode) .close-button img {
   filter: brightness(50%);
 }
 
+body:not(.dark-mode) .user-info {
+  color: #1e1e1e;
+}
+
+
 /* === Dark Mode === */
 body.dark-mode {
   background-color: #202831;
@@ -250,4 +255,10 @@ body:not(.dark-mode) .link-button {
 
 body:not(.dark-mode) .link-button:hover {
   color: #28417f !important;
+}
+
+
+
+body.dark-mode .user-info {
+  color: #E9E0E0;
 }

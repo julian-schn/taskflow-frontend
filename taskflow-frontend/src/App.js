@@ -7,7 +7,7 @@ import Completed from './pages/Completed';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import { ThemeProvider } from './pages/ThemeContext';
-import { AuthProvider } from './pages/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 import { NotificationProvider } from './context/NotificationContext';
 import { TaskProvider } from './context/TaskContext';
 

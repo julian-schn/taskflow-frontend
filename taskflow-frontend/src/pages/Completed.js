@@ -12,7 +12,7 @@ import loginIcon from '../assets/loginIconsvg.svg';
 import logoutIcon from '../assets/logoutIcon.svg';
 import { useTasks } from '../context/TaskContext';
 import { useTheme } from './ThemeContext';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 
 function Completed() {
@@ -45,7 +45,7 @@ function Completed() {
 
       {/* Show user info if logged in */}
       {isLoggedIn && user && (
-        <div className="user-info" style={{ marginBottom: '1rem', textAlign: 'center', color: '#666' }}>
+        <div className="user-info" >
           Welcome back, {user.username}!
         </div>
       )}
