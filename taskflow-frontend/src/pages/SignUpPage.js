@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
-import CloseIcon from '../assets/close.svg';
+import { ReactComponent as CloseIcon } from '../assets/close.svg';
 import './LoginPage.css';
 
 export default function SignUpPage() {
@@ -58,9 +58,8 @@ export default function SignUpPage() {
   return (
     <div className="login-page">
       <button className="close-button" onClick={() => navigate('/')} aria-label="Close">
-        <img src={CloseIcon} alt="Close" />
-      </button>
-
+   <CloseIcon className="close-icon" />
+    </button>
       <h1>Sign Up</h1>
       <form className="login-form" onSubmit={handleSignUp} noValidate>
         <div className="form-group">

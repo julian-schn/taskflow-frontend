@@ -22,6 +22,7 @@ html, body {
   margin: 0 0 5px;
 }
 
+/* --- Liste --- */
 .task-list {
   margin-top: 25px;
   width: 100%;
@@ -29,6 +30,8 @@ html, body {
   display: flex;
   flex-direction: column;
   border-radius: 10px;
+  /* optional, falls ein Scrollbalken auftaucht */
+  /* overflow: hidden; */
 }
 
 .task-box {
@@ -37,8 +40,10 @@ html, body {
   height: 40px;
   display: flex;
   align-items: center;
+  gap: 8px;
   font-family: sans-serif;
   background-color: #1f2128;
+  transition: filter 0.12s ease, opacity 0.22s ease, transform 0.22s ease;
 }
 
 .task-box:first-child {
@@ -54,10 +59,18 @@ html, body {
 .task-box:not(:last-child)::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 0; left: 0; right: 0;
   height: 1px;
+}
+
+.task-row-clickable { cursor: pointer; }
+
+.task-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .task-checkbox {
@@ -90,46 +103,40 @@ html, body {
   transform: rotate(45deg);
 }
 
-.task-input {
-  background-color: transparent;
-  border: none;
-  font-size: 16px;
-  outline: none;
-  flex: 1;
-  margin-right: 12px;
-}
-
-.task-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-left: auto;
-}
-
-.edit-button,
-.delete-button,
-.move-button {
+/* --- Info-Button wie Home --- */
+.info-button {
   background: none;
   border: none;
-  padding: 0;
+  margin-right: 10px;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-}
-
-.icon {
-  width: 27px;
-  pointer-events: none;
+  line-height: 0;
   user-select: none;
+  transition: transform 0.08s ease, opacity 0.12s ease;
 }
 
-.icon:hover {
-  filter: brightness(200%);
+.info-button:hover { transform: scale(1.05); }
+.info-button:active { transform: scale(0.98); }
+.info-button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 
+.info-icon {
+  width: 25px;
+  height: 25px;
+}
+
+/* ------- Scoped Fade/Slide-Out ------- */
+.completed .task-box.leaving {
+  opacity: 0;
+  transform: translate3d(-14px, 0, 0); /* nach links */
+  pointer-events: none;
+}
+
+/* --- Footer / Filter / Auth / Mode --- */
 .filter-container {
   display: flex;
   align-items: center;
@@ -159,6 +166,8 @@ html, body {
   cursor: pointer;
   position: relative;
   padding: 5px;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 .filter-button.active {
@@ -174,6 +183,20 @@ html, body {
   height: 2px;
   background-color: #3B5BA9;
   border-radius: 1px;
+}
+
+.filter-button:hover {
+  color: #3B5BA9;
+}
+
+.filter-button:hover::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -2px;
+  height: 2px;
+  background-color: #3B5BA9;
+  border-radius: 1px;
+  opacity: 0.6;
 }
 
 .auth-button,
@@ -192,27 +215,12 @@ html, body {
 }
 
 .auth-icon:hover,
-.mode-icon:hover{
+.mode-icon:hover {
   filter: brightness(200%);
 }
 
-.save-button {
-  background: none;
-  border: none;
-  color: #4CAF50;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
-.save-button:hover {
-  filter: brightness(150%);
-}
-
 .no-tasks {
-  margin-top: 40px;   
+  margin-top: 40px;
   text-align: center;
   font-family: sans-serif;
 }
-

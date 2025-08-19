@@ -1,0 +1,99 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding-top: 120px;
+  padding-right: 24px;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 320px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  position: relative;
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+}
+
+.modal-close-icon {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  stroke: currentColor;
+  transform-origin: center;
+  transition: transform 0.15s ease;
+}
+
+.modal-close-button:hover .modal-close-icon,
+.modal-close-button:focus-visible .modal-close-icon {
+  transform: scale(1.05);
+}
+
+.modal-close-button:active .modal-close-icon {
+  transform: scale(0.98);
+}
+
+.task-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.field-inline {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.field-inline-label {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: .85;
+  flex: 0 0 auto;
+}
+
+.task-title-button {
+  all: unset;
+  cursor: text;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.task-title-input {
+  width: 100%;
+  font-size: 16px;
+  line-height: 1.4;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #c5bdbd;
+  background: transparent;
+  outline: none;
+  flex: 1 1 auto;
+  min-width: 0;
+  box-sizing: border-box;
+}
+

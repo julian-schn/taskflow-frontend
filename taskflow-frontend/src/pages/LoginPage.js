@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
-import CloseIcon from '../assets/close.svg';
+import { ReactComponent as CloseIcon } from '../assets/close.svg';
 import './LoginPage.css';
 
 function LoginPage() {
@@ -49,8 +49,8 @@ function LoginPage() {
   return (
     <div className="login-page">
       <button className="close-button" onClick={() => navigate('/')} aria-label="Close">
-        <img src={CloseIcon} alt="Close" />
-      </button>
+  <CloseIcon className="close-icon" />
+ </button>
 
       <h1>Login</h1>
       <form className="login-form" onSubmit={handleSubmit} noValidate>

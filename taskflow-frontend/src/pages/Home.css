@@ -20,11 +20,11 @@ html, body {
 }
 
 .input-box {
-  border: 1px solid #c5bdbd;
+  border: 1px solid #c5bdbd;           
   border-radius: 10px;
   padding: 5px;
   font-size: 18px;
-  background-color: #1f2128;
+  background-color: #1f2128;             
   height: 45px;
   width: 100%;
   max-width: 600px;
@@ -33,6 +33,15 @@ html, body {
   justify-content: flex-start;
   align-items: center;
   font-family: sans-serif;
+}
+
+.task-input {
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  outline: none;
+  flex: 1;
+  margin-right: 12px;
 }
 
 .box-button {
@@ -49,13 +58,14 @@ html, body {
   background-color: #2e4786;
 }
 
+/* --- Task List --- */
 .task-list {
   margin-top: 25px;
   width: 100%;
   max-width: 600px;
   display: flex;
   flex-direction: column;
-  border: 1px solid #c5bdbd;
+  border: 1px solid #c5bdbd;             
   border-radius: 10px;
 }
 
@@ -65,8 +75,10 @@ html, body {
   height: 40px;
   display: flex;
   align-items: center;
+  gap: 8px;
   font-family: sans-serif;
-  background-color: #1f2128;
+  background-color: #1f2128;             
+  transition: filter 0.12s ease, opacity 0.22s ease, transform 0.22s ease;
 }
 
 .task-box:first-child {
@@ -82,10 +94,18 @@ html, body {
 .task-box:not(:last-child)::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 0; left: 0; right: 0;
   height: 1px;
+}
+
+.task-row-clickable { cursor: pointer; }
+
+.task-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .task-checkbox {
@@ -93,7 +113,7 @@ html, body {
   -webkit-appearance: none;
   width: 23px;
   height: 23px;
-  border: 1.5px solid #c5bdbd;
+  border: 1.5px solid #c5bdbd;            
   border-radius: 6px;
   background-color: transparent;
   cursor: pointer;
@@ -118,15 +138,6 @@ html, body {
   transform: rotate(45deg);
 }
 
-.task-input {
-  background-color: transparent;
-  border: none;
-  font-size: 16px;
-  outline: none;
-  flex: 1;
-  margin-right: 12px;
-}
-
 .task-actions {
   display: flex;
   align-items: center;
@@ -134,30 +145,38 @@ html, body {
   margin-left: auto;
 }
 
-.edit-button,
-.delete-button,
-.move-button {
+.info-button {
   background: none;
   border: none;
-  padding: 0;
+  margin-right: 10px;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-}
-
-.icon {
-  width: 27px;
-  pointer-events: none;
+  line-height: 0;
   user-select: none;
+  transition: transform 0.08s ease, opacity 0.12s ease;
 }
 
-.icon:hover {
-  filter: brightness(200%);
+.info-button:hover { transform: scale(1.05); }
+.info-button:active { transform: scale(0.98); }
+.info-button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 
+.info-icon {
+  width: 25px;
+  height: 25px;
+}
+
+.home .task-box.leaving {
+  opacity: 0;
+  transform: translate3d(14px, 0, 0); 
+  pointer-events: none;
+}
+
+/* --- Footer / Filter / Auth / Mode --- */
 .filter-container {
   display: flex;
   align-items: center;
@@ -168,10 +187,7 @@ html, body {
   height: 40px;
 }
 
-.auth-buttons,
-.mode-buttons {
-  flex: 0 0 auto;
-}
+.auth-buttons, .mode-buttons { flex: 0 0 auto; }
 
 .filter-buttons {
   display: flex;
@@ -194,7 +210,6 @@ html, body {
 .filter-button.active {
   font-weight: 500;
 }
-
 .filter-button.active::after {
   content: '';
   position: absolute;
@@ -206,47 +221,51 @@ html, body {
   border-radius: 1px;
 }
 
-.auth-button,
-.mode {
+.filter-button:hover {
+  color: #3B5BA9;       
+}
+.filter-button:hover::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -2px;
+  height: 2px;
+  background-color: #3B5BA9;
+  border-radius: 1px;
+  opacity: 0.6;
+}
+
+.auth-button, .mode {
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
 }
 
-.auth-icon,
-.mode-icon {
+.auth-icon, .mode-icon {
   width: 25px;
   height: 25px;
-  transition: filter 0.2s ease;
+  transition: filter 0.2s ease, transform 0.08s ease;
 }
 
-.auth-icon:hover,
-.mode-icon:hover {
+.auth-icon:hover, .mode-icon:hover {
   filter: brightness(200%);
-}
-
-.save-button {
-  background: none;
-  border: none;
-  color: #4CAF50;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
-.save-button:hover {
-  color: #66BB6A;
+  transform: scale(1.05);
 }
 
 .no-tasks {
-  margin-top: 40px;   
+  margin-top: 40px;
   text-align: center;
   font-family: sans-serif;
 }
 
 .user-info {
   margin-bottom: 1rem;
+  text-align: center;
+}
+
+.error-banner {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-radius: 4px;
   text-align: center;
 }

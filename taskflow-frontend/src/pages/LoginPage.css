@@ -81,13 +81,8 @@
   z-index: 999;
 }
 
-.close-button img {
-  width: 32px;
-  height: 32px;
-  opacity: 0.7;
-  transition: opacity 0.2s ease;
-}
 
-.close-button:hover img {
-  opacity: 1;
+.close-icon {
+   width: 32px;
+   height: 32px;
 }
