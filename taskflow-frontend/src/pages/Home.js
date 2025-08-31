@@ -31,7 +31,7 @@ function Home() {
     toggleComplete,
     loading,
     error,
-    editTask, 
+    editTask,
   } = useTasks();
 
   const navigate = useNavigate();
@@ -70,18 +70,15 @@ function Home() {
     }
   }, [isEditingTitle]);
 
+  // selectedTask mit globalem State synchron halten
   useEffect(() => {
-    if (!isEditingTitle && selectedTask) {
+    if (selectedTask) {
       const latest = tasks.find((t) => t.id === selectedTask.id);
       if (latest && latest !== selectedTask) setSelectedTask(latest);
     }
-  }, [tasks, isEditingTitle, selectedTask]);
+  }, [tasks, selectedTask]);
 
-  const startEditTitle = (e) => {
-    e?.stopPropagation?.();
-    setDraftTitle(selectedTask?.text ?? '');
-    setIsEditingTitle(true);
-  };
+
 
   const commitTitle = async () => {
     const next = (draftTitle ?? '').trim();
@@ -106,6 +103,23 @@ function Home() {
   const cancelEdit = () => {
     setDraftTitle(selectedTask?.text ?? '');
     setIsEditingTitle(false);
+  };
+
+  // Anzeigeformat für completedAt
+  const formatCompletedAt = (iso) => {
+    if (!iso) return '';
+    const d = new Date(iso);
+    const now = new Date();
+    const sameDay = d.toDateString() === now.toDateString();
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    const isYesterday = d.toDateString() === yesterday.toDateString();
+
+    const time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (sameDay) return `Today, ${time}`;
+    if (isYesterday) return `Yesterday, ${time}`;
+    const date = d.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
+    return `${date}, ${time}`;
   };
 
   return (
@@ -158,9 +172,7 @@ function Home() {
             visibleTasks.map((task) => (
               <div
                 key={task.id}
-                className={`task-box task-row-clickable ${
-                  leavingId === task.id ? 'leaving' : ''
-                }`}
+                className={`task-box task-row-clickable ${leavingId === task.id ? 'leaving' : ''}`}
                 onClick={() => openTaskModal(task)}
               >
                 <input
@@ -206,11 +218,7 @@ function Home() {
               }
             }}
           >
-            {isLoggedIn ? (
-              <LogoutIcon className="auth-icon" />
-            ) : (
-              <LoginIcon className="auth-icon" />
-            )}
+            {isLoggedIn ? <LogoutIcon className="auth-icon" /> : <LoginIcon className="auth-icon" />}
           </button>
         </div>
         <div className="filter-buttons">
@@ -230,21 +238,18 @@ function Home() {
         </div>
         <div className="mode-buttons">
           <button className="mode" onClick={toggleMode}>
-            {darkMode ? (
-              <LightIcon className="mode-icon" />
-            ) : (
-              <DarkIcon className="mode-icon" />
-            )}
+            {darkMode ? <LightIcon className="mode-icon" /> : <DarkIcon className="mode-icon" />}
           </button>
         </div>
       </div>
 
-<TaskModal isOpen={!!selectedTask} onClose={closeTaskModal}>
+      <TaskModal isOpen={!!selectedTask} onClose={closeTaskModal}>
   <div className="task-details">
     <h2 style={{ marginTop: 0, marginBottom: 8 }}>Task Details</h2>
 
-    <div className="field field-inline">
-      <label className="field-inline-label" htmlFor="task-title-input">Title:</label>
+    {/* Title als Überschrift wie "Status" */}
+    <div className="title-block">
+      <div className="section-label">Title</div>
 
       {isEditingTitle ? (
         <input
@@ -266,7 +271,11 @@ function Home() {
         <button
           className="task-title-button"
           title="Edit title"
-          onClick={startEditTitle}
+          onClick={(e) => {
+            e.stopPropagation?.();
+            setDraftTitle(selectedTask?.text ?? '');
+            setIsEditingTitle(true);
+          }}
           aria-label="Edit title"
         >
           {selectedTask?.text}
@@ -274,11 +283,55 @@ function Home() {
       )}
     </div>
 
+    {/* Status-Block */}
+    <div className="status-block">
+      <div className="section-label">Status</div>
+
+      <label htmlFor="modal-done" className="status-toggle">
+        <input
+          id="modal-done"
+          type="checkbox"
+          className="task-checkbox modal-checkbox"
+          checked={!!selectedTask?.completed}
+          onClick={(e) => e.stopPropagation()}
+          onChange={() => {
+            if (!selectedTask) return;
+            toggleComplete(selectedTask.id);
+            // Optimistisch im offenen Panel spiegeln
+            setSelectedTask((prev) =>
+              prev
+                ? {
+                    ...prev,
+                    completed: !prev.completed,
+                    completedAt: !prev.completed ? new Date().toISOString() : null,
+                  }
+                : prev
+            );
+          }}
+          aria-label={selectedTask?.completed ? 'Mark as open' : 'Mark as done'}
+        />
+
+        {/* Text mittig zur Checkbox, Zeit darunter */}
+        <div className="status-copy">
+          <span className="status-text">
+            {selectedTask?.completed ? 'Completed' : 'Mark as done'}
+          </span>
+
+          {selectedTask?.completed && (
+            <div className="completed-meta">
+              Completed • {formatCompletedAt(selectedTask?.completedAt)}
+            </div>
+          )}
+        </div>
+      </label>
+    </div>
+
     <p style={{ opacity: 0.7, marginTop: 12 }}>
       <em>(Notes, due date, priority coming soon…)</em>
     </p>
   </div>
 </TaskModal>
+
     </div>
   );
 }

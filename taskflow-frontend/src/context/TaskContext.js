@@ -1,5 +1,11 @@
 // src/context/TaskContext.js
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
 import { todoAPI } from '../services/api.js';
 import { useAuth } from './AuthContext.js';
 
@@ -7,19 +13,26 @@ const TaskContext = createContext();
 export const useTasks = () => useContext(TaskContext);
 
 // Vereinheitlicht das Task-Format aus der API
-const toLocalTask = (apiTask) => ({
-  id: apiTask.id,
-  text: apiTask.title,
-  description: apiTask.description,
-  // unterstützt sowohl boolean completed als auch status-String
-  completed:
+const toLocalTask = (apiTask) => {
+  const completed =
     typeof apiTask.completed === 'boolean'
       ? apiTask.completed
-      : apiTask.status === 'COMPLETED',
-  isEditing: false,
-  createdAt: apiTask.createdAt,
-  updatedAt: apiTask.updatedAt,
-});
+      : apiTask.status === 'COMPLETED';
+
+  const completedAt =
+    apiTask.completedAt ?? (completed ? apiTask.updatedAt ?? null : null);
+
+  return {
+    id: apiTask.id,
+    text: apiTask.title,
+    description: apiTask.description,
+    completed,
+    completedAt,
+    isEditing: false,
+    createdAt: apiTask.createdAt,
+    updatedAt: apiTask.updatedAt,
+  };
+};
 
 export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
@@ -27,17 +40,8 @@ export const TaskProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const { token, isLoggedIn } = useAuth();
 
-  // Tasks laden, wenn eingeloggt; leeren beim Ausloggen
-  useEffect(() => {
-    if (isLoggedIn && token) {
-      loadTasks();
-    } else {
-      setTasks([]);
-    }
-  }, [isLoggedIn, token]);
-
-  // Alle Tasks laden
-  const loadTasks = async () => {
+  // Alle Tasks laden (stabilisiert für useEffect)
+  const loadTasks = useCallback(async () => {
     if (!token) return;
 
     setLoading(true);
@@ -51,7 +55,16 @@ export const TaskProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
+
+  // Tasks laden, wenn eingeloggt; leeren beim Ausloggen
+  useEffect(() => {
+    if (isLoggedIn && token) {
+      loadTasks();
+    } else {
+      setTasks([]);
+    }
+  }, [isLoggedIn, token, loadTasks]);
 
   const addTask = async (text, description = '') => {
     if (!token) {
@@ -91,7 +104,7 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  // Toggle Completed
+  // Toggle Completed (+ completedAt pflegen)
   const toggleComplete = async (id) => {
     if (!token) {
       setError('Authentication required');
@@ -104,25 +117,37 @@ export const TaskProvider = ({ children }) => {
       return;
     }
 
+    const willComplete = !taskToToggle.completed;
+    const optimisticTime = willComplete ? new Date().toISOString() : null;
+
     // Optimistic UI
     setTasks((prev) =>
       prev.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
+        task.id === id
+          ? { ...task, completed: willComplete, completedAt: optimisticTime }
+          : task
       )
     );
 
     try {
       const updatedTask = await todoAPI.toggle(id, token);
 
+      const completed =
+        typeof updatedTask.completed === 'boolean'
+          ? updatedTask.completed
+          : updatedTask.status === 'COMPLETED';
+
+      const completedAt =
+        updatedTask.completedAt ??
+        (completed ? updatedTask.updatedAt ?? optimisticTime : null);
+
       setTasks((prev) =>
         prev.map((task) =>
           task.id === id
             ? {
                 ...task,
-                completed:
-                  typeof updatedTask.completed === 'boolean'
-                    ? updatedTask.completed
-                    : updatedTask.status === 'COMPLETED',
+                completed,
+                completedAt,
                 updatedAt: updatedTask.updatedAt,
               }
             : task
@@ -133,7 +158,13 @@ export const TaskProvider = ({ children }) => {
       // Revert
       setTasks((prev) =>
         prev.map((task) =>
-          task.id === id ? { ...task, completed: taskToToggle.completed } : task
+          task.id === id
+            ? {
+                ...task,
+                completed: taskToToggle.completed,
+                completedAt: taskToToggle.completedAt,
+              }
+            : task
         )
       );
 
@@ -181,6 +212,9 @@ export const TaskProvider = ({ children }) => {
                 text: updatedTask.title,
                 description: updatedTask.description,
                 updatedAt: updatedTask.updatedAt,
+                completedAt:
+                  updatedTask.completedAt ??
+                  (task.completed ? updatedTask.updatedAt ?? task.completedAt : null),
                 isEditing: false,
               }
             : task
@@ -221,7 +255,10 @@ export const TaskProvider = ({ children }) => {
       if (index <= 0) return prev;
 
       const newTasks = [...prev];
-      [newTasks[index - 1], newTasks[index]] = [newTasks[index], newTasks[index - 1]];
+      [newTasks[index - 1], newTasks[index]] = [
+        newTasks[index],
+        newTasks[index - 1],
+      ];
       return newTasks;
     });
     console.warn('moveTaskUp: Local update only - backend update not implemented');
@@ -233,7 +270,10 @@ export const TaskProvider = ({ children }) => {
       if (index === -1 || index >= prev.length - 1) return prev;
 
       const newTasks = [...prev];
-      [newTasks[index + 1], newTasks[index]] = [newTasks[index], newTasks[index + 1]];
+      [newTasks[index + 1], newTasks[index]] = [
+        newTasks[index],
+        newTasks[index + 1],
+      ];
       return newTasks;
     });
     console.warn('moveTaskDown: Local update only - backend update not implemented');

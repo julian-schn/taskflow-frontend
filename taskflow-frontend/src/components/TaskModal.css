@@ -68,14 +68,16 @@
 
 .task-title-button {
   all: unset;
+  display: block;     
+  width: 100%;
+ text-align: left;  
   cursor: text;
   font-size: 16px;
   font-weight: 500;
   line-height: 1.4;
-  padding: 6px 8px;
+  padding: 4px 3px;
   border-radius: 6px;
   border: 1px solid transparent;
-  flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
@@ -86,8 +88,9 @@
 .task-title-input {
   width: 100%;
   font-size: 16px;
+  text-align: left;
   line-height: 1.4;
-  padding: 6px 8px;
+  padding: 4px 3px;
   border-radius: 6px;
   border: 1px solid #c5bdbd;
   background: transparent;
@@ -97,3 +100,60 @@
   box-sizing: border-box;
 }
 
+.task-title-input:focus {
+  border-color: #3B5BA9;
+  box-shadow: 0 0 0 2px rgba(59, 91, 169, 0.25);
+}
+
+.status-block {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.section-label {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: .85;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.status-toggle {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.status-copy {
+  display: flex;
+  flex-direction: column;
+ 
+}
+
+.modal-checkbox {
+  margin-right: 0;
+
+}
+
+.status-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.completed-meta {
+  font-size: 12px;
+  opacity: .75;
+  margin-top: 2px;
+  padding: 0;
+}
+
+.title-block {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
