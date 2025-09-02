@@ -1,3 +1,5 @@
+/* src/pages/Home.css */
+
 /* ===========================
    Light Mode
    =========================== */
@@ -8,10 +10,7 @@ body {
   color: #1e1e1e;
 }
 
-h1,
-h2 {
-  color: #1e1e1e;
-}
+h1, h2 { color: #1e1e1e; }
 
 /* Containers & Layout */
 body:not(.dark-mode) .input-box,
@@ -27,36 +26,25 @@ body:not(.dark-mode) .task-list {
   border-radius: 10px;
 }
 
-body:not(.dark-mode) .task-box {
-  position: relative;
-}
-
+body:not(.dark-mode) .task-box { position: relative; display: flex; align-items: center; gap: 12px; }
 body:not(.dark-mode) .task-box:not(:last-child)::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background-color: #1e1e1e;
+  bottom: 0; left: 0; right: 0;
+  height: 1px; background-color: #1e1e1e;
 }
+
+body:not(.dark-mode) .task-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* Text & Info */
 body:not(.dark-mode) .no-tasks,
-body:not(.dark-mode) .user-info {
-  color: #1e1e1e;
-}
+body:not(.dark-mode) .user-info { color: #1e1e1e; }
 
 /* Inputs */
 body:not(.dark-mode) .task-input::placeholder { color: #666666; }
-
 body:not(.dark-mode) .task-checkbox { border-color: #999999; }
-body:not(.dark-mode) .task-checkbox:checked {
-  background-color: #3B5BA9;
-  border-color: #3B5BA9;
-}
+body:not(.dark-mode) .task-checkbox:checked { background-color: #3B5BA9; border-color: #3B5BA9; }
 body:not(.dark-mode) .task-checkbox:checked::after { border-color: #ffffff; }
-
 /* Login & Signup Form */
 body:not(.dark-mode) .login-form input,
 body:not(.dark-mode) .signup-form input {
@@ -80,14 +68,18 @@ body:not(.dark-mode) .login-form button:hover,
 body:not(.dark-mode) .signup-form button:hover {
   background-color: #2e4786;
 }
-
 /* Buttons & Links */
+body:not(.dark-mode) .box-button,
+body:not(.dark-mode) .login-form button,
+body:not(.dark-mode) .signup-form button { background-color: #3B5BA9; color: #ffffff; border: none; }
+body:not(.dark-mode) .box-button:hover,
+body:not(.dark-mode) .login-form button:hover,
+body:not(.dark-mode) .signup-form button:hover { background-color: #2e4786; }
+
 body:not(.dark-mode) .filter-button { color: #666666; }
 body:not(.dark-mode) .filter-button.active { color: #2A50B6; }
-
 body:not(.dark-mode) .link-button { color: #3B5BA9 !important; }
 body:not(.dark-mode) .link-button:hover { color: #28417f !important; }
-
 body:not(.dark-mode) .info-button { color: #1e1e1e; }
 
 /* Icons – einheitlich */
@@ -100,16 +92,11 @@ body:not(.dark-mode) .auth-icon:hover,
 body:not(.dark-mode) .mode-icon:hover,
 body:not(.dark-mode) .info-button:hover .info-icon,
 body:not(.dark-mode) .modal-close-button:hover .modal-close-icon { filter: brightness(80%); }
-
 body:not(.dark-mode) .close-button { color: #e3e3e3; }
 body:not(.dark-mode) .close-icon { filter: brightness(50%); }
 body:not(.dark-mode) .close-button:hover .close-icon { filter: brightness(80%); }
-
 /* States & Feedback */
-body:not(.dark-mode) .input-error {
-  border: 1px solid red !important;
-  background-color: #ffe6e6;
-} 
+body:not(.dark-mode) .input-error { border: 1px solid red !important; background-color: #ffe6e6; }
 body:not(.dark-mode) .error-message { color: red; }
 
 /* Hover Effects */
@@ -117,23 +104,57 @@ body:not(.dark-mode) .task-row-clickable:hover { filter: brightness(95%); }
 
 /* Modals */
 body:not(.dark-mode) .modal-overlay { background-color: rgba(0, 0, 0, 0.4); }
-body:not(.dark-mode) .modal-content {
-  background-color: #ffffff;
-  color: #1e1e1e;
-}
+body:not(.dark-mode) .modal-content { background-color: #ffffff; color: #1e1e1e; }
 
 body:not(.dark-mode) .task-title-button,
 body:not(.dark-mode) .task-title-input { color: #1e1e1e; }
-body:not(.dark-mode) .task-title-input {
-  background-color: #ffffff;
-  border-color: #1e1e1e;
-}
-body:not(.dark-mode) .task-title-button:hover {
-  background: rgba(0, 0, 0, 0.06);
-}
+body:not(.dark-mode) .task-title-input { background-color: #ffffff; border-color: #1e1e1e; }
+body:not(.dark-mode) .task-title-button:hover { background: rgba(0, 0, 0, 0.06); }
 body:not(.dark-mode) .task-title-input:focus,
-body:not(.dark-mode) .task-title-button:focus-visible {
-  border-color: #3B5BA9;
+body:not(.dark-mode) .task-title-button:focus-visible { border-color: #3B5BA9; }
+
+body:not(.dark-mode) .due-input { background:#fff; color:#1e1e1e; border:1px solid #999999; }
+body:not(.dark-mode) .preset-chips .chip { border: 1px solid rgba(30,30,30,.25); background:#fff; color:#1e1e1e; }
+body:not(.dark-mode) .chip-primary { background:#e8eefc; color:#2A50B6; border-color: rgba(42,80,182,.35); }
+body:not(.dark-mode) .chip-danger { background:#fde8e8; color:#b3261e; border-color: rgba(179,38,30,.4); }
+body:not(.dark-mode) .chip-subtle { background:#f2f2f2; color:#444; border-color: rgba(0,0,0,.12); }
+
+body:not(.dark-mode) .due-hint { color: #666; }
+body:not(.dark-mode) .due-hint.today { color: #7a5a00; }
+body:not(.dark-mode) .due-hint.overdue { color: #b3261e; }
+
+/* Badge in der Taskliste */
+body:not(.dark-mode) .due-badge {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  margin-left: auto;
+  margin-right: 8px;
+  border: 1px solid rgba(30,30,30,.2);
+  background: #fff;
+  color: #1e1e1e;
+  white-space: nowrap;
+  pointer-events: none;
+}
+body:not(.dark-mode) .due-badge.today {
+  background: #fff6e5;
+  border-color: #ffd699;
+  color: #7a5a00;
+}
+body:not(.dark-mode) .due-badge.tomorrow {
+  background: #eef4ff;
+  border-color: #d1defc;
+  color: #2A50B6;
+}
+body:not(.dark-mode) .due-badge.overdue {
+  background: #ffe9e9;
+  border-color: #ffb3b3;
+  color: #b3261e;
+}
+body:not(.dark-mode) .due-badge.future {
+  background: #f4f4f6;
+  border-color: #e0e0e0;
+  color: #444;
 }
 
 /* ===========================
@@ -141,11 +162,7 @@ body:not(.dark-mode) .task-title-button:focus-visible {
    =========================== */
 
 /* Base */
-body.dark-mode {
-  background-color: #202831;
-  color: #E9E0E0;
-}
-
+body.dark-mode { background-color: #202831; color: #E9E0E0; }
 body.dark-mode h1,
 body.dark-mode h2,
 body.dark-mode .no-tasks { color: #E9E0E0; }
@@ -158,15 +175,12 @@ body.dark-mode .task-list {
   color: #E9E0E0;
   border-color: #c5bdbd;
 }
-
-body.dark-mode .task-box { position: relative; }
-
+body.dark-mode .task-box { position: relative; display: flex; align-items: center; gap: 12px; }
 body.dark-mode .task-box:not(:last-child)::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  height: 1px;
-  background-color: #c5bdbd;
+  height: 1px; background-color: #c5bdbd;
 }
 
 /* Text & Info */
@@ -175,15 +189,9 @@ body.dark-mode .user-info { color: #E9E0E0; }
 /* Inputs */
 body.dark-mode .task-input { color: #E9E0E0; }
 body.dark-mode .task-input::placeholder { color: #c5bdbd; }
-
 body.dark-mode .task-checkbox { border-color: #c5bdbd; }
-body.dark-mode .task-checkbox:checked {
-  background-color: #2A50B6;  
-  border-color: #2A50B6;
-}
-body.dark-mode .task-checkbox:checked::after { border-color: #ffffff; }
-
-/* Login & Signup Form */
+body.dark-mode .task-checkbox:checked { background-color: #2A50B6; border-color: #2A50B6; }
+body.dark-mode .task-checkbox:checked::after { border-color: #ffffff; }/* Login & Signup Form */
 body.dark-mode .login-form input,
 body.dark-mode .signup-form input {
   background-color: #1f2128;
@@ -196,24 +204,16 @@ body.dark-mode .signup-form input::placeholder { color: #c5bdbd; }
 /* Primary buttons unified: Add / Login / Signup */
 body.dark-mode .box-button,
 body.dark-mode .login-form button,
-body.dark-mode .signup-form button {
-  background-color: #2A50B6; 
-  color: #E9E0E0;
-  border: none;
-}
+body.dark-mode .signup-form button { background-color: #2A50B6; color: #E9E0E0; border: none; }
 body.dark-mode .box-button:hover,
 body.dark-mode .login-form button:hover,
-body.dark-mode .signup-form button:hover {
-  background-color: #3B5BA9;
-}
+body.dark-mode .signup-form button:hover { background-color: #3B5BA9; }
 
 /* Buttons & Links */
 body.dark-mode .filter-button { color: #9fa2a6; }
 body.dark-mode .filter-button.active { color: #3B5BA9; }
-
 body.dark-mode .link-button { color: #2A50B6 !important; }
 body.dark-mode .link-button:hover { color: #4d73d3 !important; }
-
 body.dark-mode .info-button { color: #E9E0E0; }
 
 /* Icons – einheitlich */
@@ -225,39 +225,70 @@ body.dark-mode .modal-close-icon { filter: brightness(85%); }
 body.dark-mode .auth-icon:hover,
 body.dark-mode .mode-icon:hover,
 body.dark-mode .info-button:hover .info-icon,
-body.dark-mode .modal-close-button:hover .modal-close-icon { filter: brightness(110%); }
-
-body.dark-mode .close-button { color: #E9E0E0; }
+body.dark-mode .modal-close-button:hover .modal-close-icon { filter: brightness(110%); }body.dark-mode .close-button { color: #E9E0E0; }
 body.dark-mode .close-icon { filter: brightness(85%); }
 body.dark-mode .close-button:hover .close-icon { filter: brightness(110%); }
 
 /* States & Feedback */
 body.dark-mode .error-message { color: #ff7a7a; }
-body.dark-mode .input-error {
-  border: 1px solid #ff7a7a !important;
-  background-color: #3a1f1f;
-}
+body.dark-mode .input-error { border: 1px solid #ff7a7a !important; background-color: #3a1f1f; }
 
 /* Hover Effects */
 body.dark-mode .task-row-clickable:hover { filter: brightness(125%); }
 
 /* Modals */
 body.dark-mode .modal-overlay { background-color: rgba(0, 0, 0, 0.5); }
-body.dark-mode .modal-content {
-  background-color: #1f2128;
-  color: #E9E0E0;
-}
+body.dark-mode .modal-content { background-color: #1f2128; color: #E9E0E0; }
 
 body.dark-mode .task-title-button,
 body.dark-mode .task-title-input { color: #E9E0E0; }
-body.dark-mode .task-title-input {
-  background-color: #1f2128;
-  border-color: #c5bdbd;
-}
-body.dark-mode .task-title-button:hover {
-  background: rgba(255, 255, 255, 0.06);
-}
+body.dark-mode .task-title-input { background-color: #1f2128; border-color: #c5bdbd; }
+body.dark-mode .task-title-button:hover { background: rgba(255, 255, 255, 0.06); }
 body.dark-mode .task-title-input:focus,
-body.dark-mode .task-title-button:focus-visible {
-  border-color: #3B5BA9;
+body.dark-mode .task-title-button:focus-visible { border-color: #3B5BA9; }
+
+body.dark-mode .due-input { background:#1f2128; color:#E9E0E0; border:1px solid #c5bdbd; }
+body.dark-mode .due-input[data-empty="true"] { color: #8d96a0; border-color: #9aa2ac; }
+
+body.dark-mode .preset-chips .chip { border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.04); color:#E9E0E0; }
+body.dark-mode .chip-primary { background: rgba(59,91,169,.14); color:#cfe0ff; border-color: rgba(59,91,169,.45); }
+body.dark-mode .chip-danger { background: rgba(255,80,80,.12); color:#ff9f9f; border-color: rgba(255,80,80,.4); }
+body.dark-mode .chip-subtle { background: rgba(255,255,255,.06); color:#cfd3d7; border-color: rgba(255,255,255,.14); }
+
+body.dark-mode .due-hint { color:#c5bdbd; }
+body.dark-mode .due-hint.today { color:#ffd789; }
+body.dark-mode .due-hint.overdue { color:#ff9f9f; }
+
+/* Badge in der Taskliste (Dark) */
+body.dark-mode .due-badge {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  margin-left: auto;
+  margin-right: 8px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.04);
+  color: #E9E0E0;
+  white-space: nowrap;
+  pointer-events: none;
+}
+body.dark-mode .due-badge.today {
+  background: rgba(255,215,137,.18);
+  border-color: rgba(255,215,137,.4);
+  color: #ffd789;
+}
+body.dark-mode .due-badge.tomorrow {
+  background: rgba(59,91,169,.14);
+  border-color: rgba(59,91,169,.45);
+  color: #cfe0ff;
+}
+body.dark-mode .due-badge.overdue {
+  background: rgba(255,80,80,.12);
+  border-color: rgba(255,80,80,.4);
+  color: #ff9f9f;
+}
+body.dark-mode .due-badge.future {
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.14);
+  color: #cfd3d7;
 }

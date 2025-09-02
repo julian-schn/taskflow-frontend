@@ -1,4 +1,3 @@
-// src/context/TaskContext.js
 import React, {
   createContext,
   useContext,
@@ -12,7 +11,6 @@ import { useAuth } from './AuthContext.js';
 const TaskContext = createContext();
 export const useTasks = () => useContext(TaskContext);
 
-// Vereinheitlicht das Task-Format aus der API
 const toLocalTask = (apiTask) => {
   const completed =
     typeof apiTask.completed === 'boolean'
@@ -31,16 +29,54 @@ const toLocalTask = (apiTask) => {
     isEditing: false,
     createdAt: apiTask.createdAt,
     updatedAt: apiTask.updatedAt,
+    dueAt: null, 
   };
 };
+
+const blankMeta = { dueAt: {} };
 
 export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { token, isLoggedIn } = useAuth();
+  const { token, isLoggedIn, user } = useAuth();
 
-  // Alle Tasks laden (stabilisiert für useEffect)
+  const metaKey =
+    user?.id
+      ? `taskflow_meta_${user.id}`
+      : user?.username
+      ? `taskflow_meta_${user.username}`
+      : 'taskflow_meta_anon';
+
+  const readMeta = () => {
+    try {
+      const raw = localStorage.getItem(metaKey);
+      const parsed = raw ? JSON.parse(raw) : blankMeta;
+      return { ...blankMeta, ...parsed, dueAt: { ...blankMeta.dueAt, ...(parsed?.dueAt || {}) } };
+    } catch {
+      return { ...blankMeta };
+    }
+  };
+
+  const writeMeta = (meta) => {
+    try {
+      localStorage.setItem(metaKey, JSON.stringify(meta));
+    } catch {}
+  };
+
+  const setDueDate = async (id, isoOrNull) => {
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, dueAt: isoOrNull } : t)));
+    const meta = readMeta();
+    if (!isoOrNull) {
+      delete meta.dueAt[id];
+    } else {
+      meta.dueAt[id] = isoOrNull;
+    }
+    writeMeta(meta);
+
+    
+  };
+
   const loadTasks = useCallback(async () => {
     if (!token) return;
 
@@ -48,16 +84,24 @@ export const TaskProvider = ({ children }) => {
     setError(null);
     try {
       const apiTasks = await todoAPI.getAll(token);
-      setTasks(apiTasks.map(toLocalTask));
+      const base = apiTasks.map(toLocalTask);
+
+      const meta = readMeta();
+      const merged = base.map((t) => ({
+        ...t,
+        dueAt: meta.dueAt?.[t.id] ?? null,
+      }));
+
+      setTasks(merged);
     } catch (error) {
       console.error('Failed to load tasks:', error);
       setError('Failed to load tasks: ' + error.message);
     } finally {
       setLoading(false);
     }
-  }, [token]);
+  }, [token]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Tasks laden, wenn eingeloggt; leeren beim Ausloggen
+ 
   useEffect(() => {
     if (isLoggedIn && token) {
       loadTasks();
@@ -76,7 +120,11 @@ export const TaskProvider = ({ children }) => {
     setError(null);
     try {
       const newTask = await todoAPI.create(text, description, token);
-      setTasks((prev) => [...prev, toLocalTask(newTask)]);
+      const meta = readMeta();
+      setTasks((prev) => [
+        ...prev,
+        { ...toLocalTask(newTask), dueAt: meta.dueAt?.[newTask.id] ?? null },
+      ]);
     } catch (error) {
       console.error('Failed to add task:', error);
       setError('Failed to add task: ' + error.message);
@@ -96,6 +144,12 @@ export const TaskProvider = ({ children }) => {
     try {
       await todoAPI.delete(id, token);
       setTasks((prev) => prev.filter((task) => task.id !== id));
+
+      const meta = readMeta();
+      if (meta.dueAt[id]) {
+        delete meta.dueAt[id];
+        writeMeta(meta);
+      }
     } catch (error) {
       console.error('Failed to delete task:', error);
       setError('Failed to delete task: ' + error.message);
@@ -104,7 +158,6 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  // Toggle Completed (+ completedAt pflegen)
   const toggleComplete = async (id) => {
     if (!token) {
       setError('Authentication required');
@@ -178,7 +231,6 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  // Edit Title
   const editTask = async (id, newText) => {
     if (!token) {
       setError('Authentication required');
@@ -191,7 +243,6 @@ export const TaskProvider = ({ children }) => {
       return;
     }
 
-    // Optimistic UI
     setTasks((prev) =>
       prev.map((task) =>
         task.id === id ? { ...task, text: newText, isEditing: false } : task
@@ -222,7 +273,6 @@ export const TaskProvider = ({ children }) => {
       );
     } catch (error) {
       console.error('Failed to edit task:', error);
-      // Revert
       setTasks((prev) =>
         prev.map((task) =>
           task.id === id ? { ...task, text: taskToEdit.text, isEditing: false } : task
@@ -294,6 +344,7 @@ export const TaskProvider = ({ children }) => {
         moveTaskUp,
         moveTaskDown,
         loadTasks,
+        setDueDate, 
       }}
     >
       {children}

@@ -1,7 +1,6 @@
-// src/components/TaskModal.js
 import React from "react";
-import './TaskModal.css';
-import { ReactComponent as CloseIcon } from '../assets/close.svg';
+import "./TaskModal.css";
+import { ReactComponent as CloseIcon } from "../assets/close.svg";
 
 const TaskModal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
@@ -10,6 +9,8 @@ const TaskModal = ({ isOpen, onClose, children }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div
         className="modal-content"
+        role="dialog"
+        aria-modal="true"
         onClick={(e) => e.stopPropagation()}
       >
         <button

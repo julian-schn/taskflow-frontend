@@ -224,3 +224,19 @@ html, body {
   text-align: center;
   font-family: sans-serif;
 }
+
+.due-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1.4;
+  margin-left: auto; 
+  opacity: 0.9;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+
+.info-button {
+  margin-left: 8px;
+}
