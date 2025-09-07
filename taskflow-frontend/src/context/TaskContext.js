@@ -29,11 +29,12 @@ const toLocalTask = (apiTask) => {
     isEditing: false,
     createdAt: apiTask.createdAt,
     updatedAt: apiTask.updatedAt,
-    dueAt: null, 
+    dueAt: null,
+    notes: '',
   };
 };
 
-const blankMeta = { dueAt: {} };
+const blankMeta = { dueAt: {}, notes: {} };
 
 export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
@@ -52,7 +53,12 @@ export const TaskProvider = ({ children }) => {
     try {
       const raw = localStorage.getItem(metaKey);
       const parsed = raw ? JSON.parse(raw) : blankMeta;
-      return { ...blankMeta, ...parsed, dueAt: { ...blankMeta.dueAt, ...(parsed?.dueAt || {}) } };
+      return {
+        ...blankMeta,
+        ...parsed,
+        dueAt: { ...blankMeta.dueAt, ...(parsed?.dueAt || {}) },
+        notes: { ...blankMeta.notes, ...(parsed?.notes || {}) },
+      };
     } catch {
       return { ...blankMeta };
     }
@@ -73,8 +79,17 @@ export const TaskProvider = ({ children }) => {
       meta.dueAt[id] = isoOrNull;
     }
     writeMeta(meta);
+  };
 
-    
+  const setNote = async (id, text) => {
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, notes: text ?? '' } : t)));
+    const meta = readMeta();
+    if (!text) {
+      delete meta.notes[id];
+    } else {
+      meta.notes[id] = text;
+    }
+    writeMeta(meta);
   };
 
   const loadTasks = useCallback(async () => {
@@ -90,6 +105,7 @@ export const TaskProvider = ({ children }) => {
       const merged = base.map((t) => ({
         ...t,
         dueAt: meta.dueAt?.[t.id] ?? null,
+        notes: meta.notes?.[t.id] ?? '',
       }));
 
       setTasks(merged);
@@ -101,7 +117,6 @@ export const TaskProvider = ({ children }) => {
     }
   }, [token]); // eslint-disable-line react-hooks/exhaustive-deps
 
- 
   useEffect(() => {
     if (isLoggedIn && token) {
       loadTasks();
@@ -123,7 +138,11 @@ export const TaskProvider = ({ children }) => {
       const meta = readMeta();
       setTasks((prev) => [
         ...prev,
-        { ...toLocalTask(newTask), dueAt: meta.dueAt?.[newTask.id] ?? null },
+        {
+          ...toLocalTask(newTask),
+          dueAt: meta.dueAt?.[newTask.id] ?? null,
+          notes: meta.notes?.[newTask.id] ?? '',
+        },
       ]);
     } catch (error) {
       console.error('Failed to add task:', error);
@@ -148,8 +167,11 @@ export const TaskProvider = ({ children }) => {
       const meta = readMeta();
       if (meta.dueAt[id]) {
         delete meta.dueAt[id];
-        writeMeta(meta);
       }
+      if (meta.notes[id]) {
+        delete meta.notes[id];
+      }
+      writeMeta(meta);
     } catch (error) {
       console.error('Failed to delete task:', error);
       setError('Failed to delete task: ' + error.message);
@@ -173,7 +195,6 @@ export const TaskProvider = ({ children }) => {
     const willComplete = !taskToToggle.completed;
     const optimisticTime = willComplete ? new Date().toISOString() : null;
 
-    // Optimistic UI
     setTasks((prev) =>
       prev.map((task) =>
         task.id === id
@@ -208,7 +229,6 @@ export const TaskProvider = ({ children }) => {
       );
     } catch (error) {
       console.error('Failed to toggle task:', error);
-      // Revert
       setTasks((prev) =>
         prev.map((task) =>
           task.id === id
@@ -344,7 +364,8 @@ export const TaskProvider = ({ children }) => {
         moveTaskUp,
         moveTaskDown,
         loadTasks,
-        setDueDate, 
+        setDueDate,
+        setNote,
       }}
     >
       {children}

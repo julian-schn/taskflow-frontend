@@ -20,11 +20,11 @@ html, body {
 }
 
 .input-box {
-  border: 1px solid #c5bdbd;           
+  border: 1px solid #c5bdbd;
   border-radius: 10px;
   padding: 5px;
   font-size: 18px;
-  background-color: #1f2128;             
+  background-color: #1f2128;
   height: 45px;
   width: 100%;
   max-width: 600px;
@@ -58,14 +58,13 @@ html, body {
   background-color: #2e4786;
 }
 
-/* --- Task List --- */
 .task-list {
   margin-top: 25px;
   width: 100%;
   max-width: 600px;
   display: flex;
   flex-direction: column;
-  border: 1px solid #c5bdbd;             
+  border: 1px solid #c5bdbd;
   border-radius: 10px;
 }
 
@@ -77,7 +76,7 @@ html, body {
   align-items: center;
   gap: 8px;
   font-family: sans-serif;
-  background-color: #1f2128;             
+  background-color: #1f2128;
   transition: filter 0.12s ease, opacity 0.22s ease, transform 0.22s ease;
 }
 
@@ -113,7 +112,7 @@ html, body {
   -webkit-appearance: none;
   width: 23px;
   height: 23px;
-  border: 1.5px solid #c5bdbd;            
+  border: 1.5px solid #c5bdbd;
   border-radius: 6px;
   background-color: transparent;
   cursor: pointer;
@@ -172,11 +171,10 @@ html, body {
 
 .home .task-box.leaving {
   opacity: 0;
-  transform: translate3d(14px, 0, 0); 
+  transform: translate3d(14px, 0, 0);
   pointer-events: none;
 }
 
-/* --- Footer / Filter / Auth / Mode --- */
 .filter-container {
   display: flex;
   align-items: center;
@@ -210,6 +208,7 @@ html, body {
 .filter-button.active {
   font-weight: 500;
 }
+
 .filter-button.active::after {
   content: '';
   position: absolute;
@@ -222,8 +221,9 @@ html, body {
 }
 
 .filter-button:hover {
-  color: #3B5BA9;       
+  color: #3B5BA9;
 }
+
 .filter-button:hover::after {
   content: '';
   position: absolute;
@@ -268,4 +268,108 @@ html, body {
   padding: 0.5rem;
   border-radius: 4px;
   text-align: center;
+}
+
+.task-details .section-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-details .section-block + .section-block {
+  margin-top: 24px;
+}
+
+.task-details > .section-block:first-of-type {
+  margin-top: 24px;
+}
+
+.due-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.due-input,
+.notes-textarea,
+.task-title-input {
+  transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+
+.notes-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section-label {
+  font-size: 12px;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.notes-textarea {
+  width: 100%;
+  max-width: 600px;
+  resize: none;
+  min-height: 100px;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.notes-hint {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.delete-button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  filter: brightness(1.05);
+}
+
+.delete-confirm {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.confirm-text {
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: inherit;
+  border: 1px solid currentColor;
+}
+
+.btn-danger:hover {
+  filter: brightness(1.05);
 }

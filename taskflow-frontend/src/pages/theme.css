@@ -1,10 +1,7 @@
-/* src/pages/Home.css */
-
 /* ===========================
    Light Mode
    =========================== */
 
-/* Base */
 body {
   background-color: #f7f7f7;
   color: #1e1e1e;
@@ -12,7 +9,6 @@ body {
 
 h1, h2 { color: #1e1e1e; }
 
-/* Containers & Layout */
 body:not(.dark-mode) .input-box,
 body:not(.dark-mode) .task-box,
 body:not(.dark-mode) .task-list {
@@ -36,16 +32,14 @@ body:not(.dark-mode) .task-box:not(:last-child)::after {
 
 body:not(.dark-mode) .task-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* Text & Info */
 body:not(.dark-mode) .no-tasks,
 body:not(.dark-mode) .user-info { color: #1e1e1e; }
 
-/* Inputs */
 body:not(.dark-mode) .task-input::placeholder { color: #666666; }
 body:not(.dark-mode) .task-checkbox { border-color: #999999; }
 body:not(.dark-mode) .task-checkbox:checked { background-color: #3B5BA9; border-color: #3B5BA9; }
 body:not(.dark-mode) .task-checkbox:checked::after { border-color: #ffffff; }
-/* Login & Signup Form */
+
 body:not(.dark-mode) .login-form input,
 body:not(.dark-mode) .signup-form input {
   background-color: #ffffff;
@@ -59,8 +53,8 @@ body:not(.dark-mode) .box-button,
 body:not(.dark-mode) .login-form button,
 body:not(.dark-mode) .signup-form button {
   background-color: #3B5BA9;
-  color: #ffffff;           
-  border: none;             
+  color: #ffffff;
+  border: none;
 }
 
 body:not(.dark-mode) .box-button:hover,
@@ -68,13 +62,6 @@ body:not(.dark-mode) .login-form button:hover,
 body:not(.dark-mode) .signup-form button:hover {
   background-color: #2e4786;
 }
-/* Buttons & Links */
-body:not(.dark-mode) .box-button,
-body:not(.dark-mode) .login-form button,
-body:not(.dark-mode) .signup-form button { background-color: #3B5BA9; color: #ffffff; border: none; }
-body:not(.dark-mode) .box-button:hover,
-body:not(.dark-mode) .login-form button:hover,
-body:not(.dark-mode) .signup-form button:hover { background-color: #2e4786; }
 
 body:not(.dark-mode) .filter-button { color: #666666; }
 body:not(.dark-mode) .filter-button.active { color: #2A50B6; }
@@ -82,7 +69,6 @@ body:not(.dark-mode) .link-button { color: #3B5BA9 !important; }
 body:not(.dark-mode) .link-button:hover { color: #28417f !important; }
 body:not(.dark-mode) .info-button { color: #1e1e1e; }
 
-/* Icons – einheitlich */
 body:not(.dark-mode) .modal-close-button { color: #e3e3e3; }
 body:not(.dark-mode) .auth-icon,
 body:not(.dark-mode) .mode-icon,
@@ -95,14 +81,12 @@ body:not(.dark-mode) .modal-close-button:hover .modal-close-icon { filter: brigh
 body:not(.dark-mode) .close-button { color: #e3e3e3; }
 body:not(.dark-mode) .close-icon { filter: brightness(50%); }
 body:not(.dark-mode) .close-button:hover .close-icon { filter: brightness(80%); }
-/* States & Feedback */
+
 body:not(.dark-mode) .input-error { border: 1px solid red !important; background-color: #ffe6e6; }
 body:not(.dark-mode) .error-message { color: red; }
 
-/* Hover Effects */
 body:not(.dark-mode) .task-row-clickable:hover { filter: brightness(95%); }
 
-/* Modals */
 body:not(.dark-mode) .modal-overlay { background-color: rgba(0, 0, 0, 0.4); }
 body:not(.dark-mode) .modal-content { background-color: #ffffff; color: #1e1e1e; }
 
@@ -123,7 +107,6 @@ body:not(.dark-mode) .due-hint { color: #666; }
 body:not(.dark-mode) .due-hint.today { color: #7a5a00; }
 body:not(.dark-mode) .due-hint.overdue { color: #b3261e; }
 
-/* Badge in der Taskliste */
 body:not(.dark-mode) .due-badge {
   font-size: 12px;
   padding: 4px 8px;
@@ -157,17 +140,52 @@ body:not(.dark-mode) .due-badge.future {
   color: #444;
 }
 
+/* Notes Textarea (Light) */
+body:not(.dark-mode) .notes-textarea {
+  background: #fff;
+  color: #1e1e1e;
+  border: 1px solid #1e1e1e;
+}
+body:not(.dark-mode) .notes-textarea:focus-visible {
+  outline: none;
+  border-color: #3B5BA9;
+}
+
+/* Light mode: Hover/Fokus für Date/Time + Notes identisch */
+body:not(.dark-mode) .due-input:hover,
+body:not(.dark-mode) .notes-textarea:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+body:not(.dark-mode) .due-input:focus-visible,
+body:not(.dark-mode) .notes-textarea:focus-visible {
+  outline: none;
+  border-color: #3B5BA9;
+  box-shadow: 0 0 0 3px rgba(59,91,169,.18);
+}
+
+body:not(.dark-mode) .delete-button,
+body:not(.dark-mode) .btn-danger {
+  background: #ffe9e9;
+  border: 1px solid #ffb3b3;
+  color: #b3261e;
+}
+
+body:not(.dark-mode) .delete-button:hover,
+body:not(.dark-mode) .btn-danger:hover {
+  filter: brightness(1.05);
+}
+
+
 /* ===========================
    Dark Mode
    =========================== */
 
-/* Base */
 body.dark-mode { background-color: #202831; color: #E9E0E0; }
 body.dark-mode h1,
 body.dark-mode h2,
 body.dark-mode .no-tasks { color: #E9E0E0; }
 
-/* Containers & Layout */
 body.dark-mode .input-box,
 body.dark-mode .task-box,
 body.dark-mode .task-list {
@@ -183,15 +201,14 @@ body.dark-mode .task-box:not(:last-child)::after {
   height: 1px; background-color: #c5bdbd;
 }
 
-/* Text & Info */
 body.dark-mode .user-info { color: #E9E0E0; }
 
-/* Inputs */
 body.dark-mode .task-input { color: #E9E0E0; }
 body.dark-mode .task-input::placeholder { color: #c5bdbd; }
 body.dark-mode .task-checkbox { border-color: #c5bdbd; }
 body.dark-mode .task-checkbox:checked { background-color: #2A50B6; border-color: #2A50B6; }
-body.dark-mode .task-checkbox:checked::after { border-color: #ffffff; }/* Login & Signup Form */
+body.dark-mode .task-checkbox:checked::after { border-color: #ffffff; }
+
 body.dark-mode .login-form input,
 body.dark-mode .signup-form input {
   background-color: #1f2128;
@@ -201,7 +218,6 @@ body.dark-mode .signup-form input {
 body.dark-mode .login-form input::placeholder,
 body.dark-mode .signup-form input::placeholder { color: #c5bdbd; }
 
-/* Primary buttons unified: Add / Login / Signup */
 body.dark-mode .box-button,
 body.dark-mode .login-form button,
 body.dark-mode .signup-form button { background-color: #2A50B6; color: #E9E0E0; border: none; }
@@ -209,14 +225,12 @@ body.dark-mode .box-button:hover,
 body.dark-mode .login-form button:hover,
 body.dark-mode .signup-form button:hover { background-color: #3B5BA9; }
 
-/* Buttons & Links */
 body.dark-mode .filter-button { color: #9fa2a6; }
 body.dark-mode .filter-button.active { color: #3B5BA9; }
 body.dark-mode .link-button { color: #2A50B6 !important; }
 body.dark-mode .link-button:hover { color: #4d73d3 !important; }
 body.dark-mode .info-button { color: #E9E0E0; }
 
-/* Icons – einheitlich */
 body.dark-mode .modal-close-button { color: #E9E0E0; }
 body.dark-mode .auth-icon,
 body.dark-mode .mode-icon,
@@ -225,18 +239,16 @@ body.dark-mode .modal-close-icon { filter: brightness(85%); }
 body.dark-mode .auth-icon:hover,
 body.dark-mode .mode-icon:hover,
 body.dark-mode .info-button:hover .info-icon,
-body.dark-mode .modal-close-button:hover .modal-close-icon { filter: brightness(110%); }body.dark-mode .close-button { color: #E9E0E0; }
+body.dark-mode .modal-close-button:hover .modal-close-icon { filter: brightness(110%); }
+body.dark-mode .close-button { color: #E9E0E0; }
 body.dark-mode .close-icon { filter: brightness(85%); }
 body.dark-mode .close-button:hover .close-icon { filter: brightness(110%); }
 
-/* States & Feedback */
 body.dark-mode .error-message { color: #ff7a7a; }
 body.dark-mode .input-error { border: 1px solid #ff7a7a !important; background-color: #3a1f1f; }
 
-/* Hover Effects */
 body.dark-mode .task-row-clickable:hover { filter: brightness(125%); }
 
-/* Modals */
 body.dark-mode .modal-overlay { background-color: rgba(0, 0, 0, 0.5); }
 body.dark-mode .modal-content { background-color: #1f2128; color: #E9E0E0; }
 
@@ -259,7 +271,6 @@ body.dark-mode .due-hint { color:#c5bdbd; }
 body.dark-mode .due-hint.today { color:#ffd789; }
 body.dark-mode .due-hint.overdue { color:#ff9f9f; }
 
-/* Badge in der Taskliste (Dark) */
 body.dark-mode .due-badge {
   font-size: 12px;
   padding: 4px 8px;
@@ -292,3 +303,42 @@ body.dark-mode .due-badge.future {
   border-color: rgba(255,255,255,.14);
   color: #cfd3d7;
 }
+
+/* Notes Textarea (Dark) */
+body.dark-mode .notes-textarea {
+  background: #1f2128;
+  color: #E9E0E0;
+  border: 1px solid #c5bdbd;
+}
+body.dark-mode .notes-textarea:focus-visible {
+  outline: none;
+  border-color: #3B5BA9;
+}
+
+
+
+body.dark-mode .due-input:hover,
+body.dark-mode .notes-textarea:hover {
+  background: rgba(255,255,255,.06);
+}
+
+body.dark-mode .due-input:focus-visible,
+body.dark-mode .notes-textarea:focus-visible {
+  outline: none;
+  border-color: #3B5BA9;
+  box-shadow: 0 0 0 3px rgba(59,91,169,.20);
+}
+
+
+body.dark-mode .delete-button,
+body.dark-mode .btn-danger {
+  background: rgba(255,80,80,.12);
+  border: 1px solid rgba(255,80,80,.4);
+  color: #ff9f9f;
+}
+
+body.dark-mode .delete-button:hover,
+body.dark-mode .btn-danger:hover {
+  filter: brightness(1.3);
+}
+

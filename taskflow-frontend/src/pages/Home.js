@@ -1,4 +1,3 @@
-// src/pages/Home.js
 import React, { useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Home.css';
@@ -17,13 +16,14 @@ function Home() {
   const [taskInput, setTaskInput] = useState('');
   const [selectedTask, setSelectedTask] = useState(null);
   const [leavingId, setLeavingId] = useState(null);
-
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [draftTitle, setDraftTitle] = useState('');
   const titleInputRef = useRef(null);
-
   const [dueDateStr, setDueDateStr] = useState('');
   const [dueTimeStr, setDueTimeStr] = useState('');
+  const [notesStr, setNotesStr] = useState('');
+  const notesDebounceRef = useRef(null);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
 
   const { showNotification } = useNotification();
   const { darkMode, toggleMode } = useTheme();
@@ -37,6 +37,8 @@ function Home() {
     error,
     editTask,
     setDueDate,
+    setNote,
+    deleteTask,
   } = useTasks();
 
   const navigate = useNavigate();
@@ -56,11 +58,15 @@ function Home() {
     const { dateStr, timeStr } = isoToLocalParts(task?.dueAt);
     setDueDateStr(dateStr);
     setDueTimeStr(timeStr);
+    setNotesStr(task?.notes ?? '');
+    setConfirmingDelete(false);
   };
 
   const closeTaskModal = () => {
     setIsEditingTitle(false);
     setSelectedTask(null);
+    setNotesStr('');
+    setConfirmingDelete(false);
   };
 
   const handleCompleteWithFade = (id) => {
@@ -80,6 +86,7 @@ function Home() {
     if (selectedTask) {
       const latest = tasks.find((t) => t.id === selectedTask.id);
       if (latest && latest !== selectedTask) setSelectedTask(latest);
+      if (latest && latest.notes !== undefined) setNotesStr(latest.notes ?? '');
     }
   }, [tasks, selectedTask]);
 
@@ -151,35 +158,29 @@ function Home() {
   }
 
   function humanizeDue(iso) {
-  if (!iso) return '';
-  const now = new Date();
-  const d = new Date(iso);
-  const timePart = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-  if (d < now) {
-    const diffMs = now - d;
-    const mins  = Math.round(diffMs / 60000);
-    const hours = Math.round(diffMs / 3600000);
-    const days  = Math.round(diffMs / 86400000);
-    if (diffMs < 60 * 60000)  return `Overdue · ${mins}m`;
-    if (diffMs < 24 * 3600000) return `Overdue · ${hours}h`;
-    return `Overdue · ${days}d`;
+    if (!iso) return '';
+    const now = new Date();
+    const d = new Date(iso);
+    const timePart = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (d < now) {
+      const diffMs = now - d;
+      const mins = Math.round(diffMs / 60000);
+      const hours = Math.round(diffMs / 3600000);
+      const days = Math.round(diffMs / 86400000);
+      if (diffMs < 60 * 60000) return `Overdue · ${mins}m`;
+      if (diffMs < 24 * 3600000) return `Overdue · ${hours}h`;
+      return `Overdue · ${days}d`;
+    }
+    const sameDay = d.toDateString() === now.toDateString();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(now.getDate() + 1);
+    if (sameDay) return `Due today ${timePart}`;
+    if (d.toDateString() === tomorrow.toDateString()) return `Due tomorrow ${timePart}`;
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startOfDue = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    const days = Math.round((startOfDue - startOfToday) / 86400000);
+    return `Due in ${days} days`;
   }
-
-  const sameDay = d.toDateString() === now.toDateString();
-  const tomorrow = new Date(now);
-  tomorrow.setDate(now.getDate() + 1);
-
-  if (sameDay) return `Due today ${timePart}`;
-  if (d.toDateString() === tomorrow.toDateString()) return `Due tomorrow ${timePart}`;
-
-  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const startOfDue   = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  const days = Math.round((startOfDue - startOfToday) / 86400000);
-
-  return `Due in ${days} days`;
-}
-
 
   function formatDueBadge(iso) {
     const d = new Date(iso);
@@ -223,13 +224,33 @@ function Home() {
     saveDueIso(base.toISOString());
   }
 
+  const scheduleSaveNotes = (value) => {
+    if (!selectedTask) return;
+    if (notesDebounceRef.current) clearTimeout(notesDebounceRef.current);
+    notesDebounceRef.current = setTimeout(() => {
+      setNote(selectedTask.id, value);
+      setSelectedTask((prev) => (prev ? { ...prev, notes: value } : prev));
+    }, 400);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (notesDebounceRef.current) clearTimeout(notesDebounceRef.current);
+    };
+  }, []);
+
+  const handleDelete = async () => {
+    if (!selectedTask) return;
+    await deleteTask(selectedTask.id);
+    showNotification?.('Task deleted');
+    closeTaskModal();
+  };
+
   return (
     <div className="home">
       <h1>taskflow.</h1>
 
-      {isLoggedIn && user && (
-        <div className="user-info">Welcome back, {user.username}!</div>
-      )}
+      {isLoggedIn && user && <div className="user-info">Welcome back, {user.username}!</div>}
 
       {error && <div className="error-banner">{error}</div>}
 
@@ -244,11 +265,7 @@ function Home() {
           onKeyDown={(e) => e.key === 'Enter' && handleAddTask()}
           disabled={!isLoggedIn || loading}
         />
-        <button
-          className="box-button"
-          onClick={handleAddTask}
-          disabled={!isLoggedIn || loading}
-        >
+        <button className="box-button" onClick={handleAddTask} disabled={!isLoggedIn || loading}>
           {loading ? 'Adding...' : 'Add'}
         </button>
       </div>
@@ -328,17 +345,10 @@ function Home() {
         </div>
 
         <div className="filter-buttons">
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}
-          >
+          <NavLink to="/" end className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>
             All
           </NavLink>
-          <NavLink
-            to="/completed"
-            className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}
-          >
+          <NavLink to="/completed" className={({ isActive }) => `filter-button ${isActive ? 'active' : ''}`}>
             Completed
           </NavLink>
         </div>
@@ -354,7 +364,7 @@ function Home() {
         <div className="task-details">
           <h2 style={{ marginTop: 0, marginBottom: 8 }}>Task Details</h2>
 
-          <div className="title-block">
+          <div className="title-block section-block">
             <div className="section-label">Title</div>
             {isEditingTitle ? (
               <input
@@ -388,7 +398,7 @@ function Home() {
             )}
           </div>
 
-          <div className="status-block">
+          <div className="status-block section-block">
             <div className="section-label">Status</div>
             <label htmlFor="modal-done" className="status-toggle">
               <input
@@ -425,7 +435,7 @@ function Home() {
             </label>
           </div>
 
-          <div className="due-block">
+          <div className="due-block section-block">
             <div className="section-label">Due date</div>
             <div className="due-row">
               <input
@@ -471,9 +481,58 @@ function Home() {
             )}
           </div>
 
-          <p style={{ opacity: 0.7, marginTop: 12 }}>
-            <em>(Notes, due date, priority coming soon…)</em>
-          </p>
+          <div className="notes-block section-block">
+            <div className="section-label">Notes</div>
+            <textarea
+              className="notes-textarea"
+              placeholder="Write notes…"
+              rows={5}
+              value={notesStr}
+              onChange={(e) => {
+                const v = e.target.value;
+                setNotesStr(v);
+                scheduleSaveNotes(v);
+              }}
+              onBlur={() => {
+                if (notesDebounceRef.current) clearTimeout(notesDebounceRef.current);
+                if (selectedTask) {
+                  setNote(selectedTask.id, notesStr);
+                  setSelectedTask((prev) => (prev ? { ...prev, notes: notesStr } : prev));
+                }
+              }}
+              aria-label="Notes"
+            />
+          </div>
+
+          <div className="modal-footer">
+            {!confirmingDelete ? (
+              <button
+                className="delete-button"
+                onClick={() => setConfirmingDelete(true)}
+                aria-label="Delete task"
+              >
+                Delete task
+              </button>
+            ) : (
+              <div className="delete-confirm">
+                <span className="confirm-text">Delete this task?</span>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setConfirmingDelete(false)}
+                  aria-label="Cancel delete"
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={handleDelete}
+                  aria-label="Confirm delete"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </TaskModal>
     </div>
